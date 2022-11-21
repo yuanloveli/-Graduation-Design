@@ -1,0 +1,332 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-个人简历</title>
+<link rel="shortcut icon" href="../images/copylogo.png">
+<link rel="stylesheet" href="../css/reset.css">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/cart.css">
+<link rel="stylesheet" href="../css/resume.css">
+</head>
+
+<body style="background-color: #fff">
+	<!-- 头部  -->
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到兼职招聘系统</div>
+			<div class="fr">
+				<div id="n" class="login_info fl">
+					欢迎：
+					<p id="em" style="margin-right: 15px; color: blue">y c</p>
+				</div>
+				<div class="login_btn fl">
+					<a href="../login.html" id="login">登录</a> 
+					<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display: none" onclick="loginout()"> 
+					<span> | </span> 
+					<a href="../register_jober.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span> | </span> <a href="user.html">用户中心</a> 
+					<span> | </span> <a href="resume.html">我的简历</a> 
+					<span> | </span> <a href="delivery.html">我的投递</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+	<!-- 搜索框-->
+	<div class="search_bar clearfix">
+		<a href="../index_jober.html" class="logo fl"><img
+			src="../images/logo.png"></a>
+		<div class="">
+		</div>
+	</div>
+	
+<div id="resume_info">
+	<div class="resume-content" v-if="isresume" >
+		<div class="resume-content-box">
+			<div class="resume-box-header">
+				<h2>我的在线简历</h2><a v-if="isresume" href="resume_details.html#1" target="_blank">修改简历</a>
+			</div>
+			<div class="resume-box resume-center">
+				<div id="userinfo" class="resume-item resume-userinfo resume-baseInfo resume-undefined">
+					<div class="item-primary baseinfo-container">
+						<div class="header-upload">
+							<div class="header-box">
+								<img src="../images/head.png" class="header-img" />
+							</div>
+						</div>
+						<div class="user-info">
+							<div class="name"></div>{{resume.realName}}
+							<div class="info-flex">
+								<div class="info-flex-item">
+									<div class="info-labels">
+										<p>
+											<span class="prev-line">
+												<i class="fz-resume fz-experience"></i>{{resume.age}}岁
+											</span> 
+											<span class="prev-line"> 
+												<i class="fz-resume fz-degree"></i>{{resume.education}}-{{resume.school}}
+											</span> 
+											<span class="prev-line"> 
+												<i class="fz-resume fz-status"></i>{{resume.major}}
+											</span>
+										</p>
+										<p>
+											<span class="prev-line"><i class="fz-resume fz-tel"></i>{{resume.tel}}</span>
+											<span class="prev-line"><i class="fz-resume fz-mail"></i>{{resume.email}}</span>
+											 <span class="prev-line"><i class="fz-resume fz-job"></i>{{resume.intention}}</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 自我介绍 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">{{resume.rdescr}}</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 专业技能 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">{{resume.skill}}</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 实习经历 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">{{resume.internship}}</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 项目经历 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">{{resume.project}}</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 没有简历 -->
+	<div class="resume-content" v-if="!isresume">
+		<div class="resume-content-box">
+			<div class="resume-box-header">
+				<h2>还没有简历，马上创建一份吧！</h2><a v-if="!isresume" href="resume_details.html#0" target="_blank">创建简历</a>
+			</div>
+			<div class="resume-box resume-center">
+				<div id="userinfo" class="resume-item resume-userinfo resume-baseInfo resume-undefined">
+					<div class="item-primary baseinfo-container">
+						<div class="header-upload">
+							<div class="header-box">
+								<img src="../images/head.png" class="header-img" />
+							</div>
+						</div>
+						<div class="user-info">
+							<div class="name"></div>姓名
+							<div class="info-flex">
+								<div class="info-flex-item">
+									<div class="info-labels">
+										<p>
+											<span class="prev-line">
+												<i class="fz-resume fz-experience"></i>年龄
+											</span> 
+											<span class="prev-line"> 
+												<i class="fz-resume fz-degree"></i>学历-学校
+											</span> 
+											<span class="prev-line"> 
+												<i class="fz-resume fz-status"></i>专业
+											</span>
+										</p>
+										<p>
+											<span class="prev-line"><i class="fz-resume fz-tel"></i>电话号码</span>
+											<span class="prev-line"><i class="fz-resume fz-mail"></i>邮箱</span>
+											 <span class="prev-line"><i class="fz-resume fz-job"></i>意向岗位</span>
+										</p>
+									</div>
+								</div>
+							</div>
+						</div>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 自我介绍 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">自我介绍</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 专业技能 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">专业技能</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 实习经历 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">实习经历</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+				<div id="summary" class="resume-item resume-summary resume-userDesc resume-undefined">
+					<div class="item-primary advantage-show">
+						<h3 class="title"> 项目经历 </h3>
+						<ul>
+							<li class="">
+								<div class="primary-info">
+									<div class="info-text advantage-text">项目经历</div>
+								</div>	
+							</li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+</div>
+
+	<!-- 版权所有 -->
+	<div class="footer">
+		<div class="foot_link">
+			<a href="#">关于我们</a> <span> | </span> <a href="#">联系我们</a> <span>
+				| </span> <a href="#">招聘人才</a> <span> | </span> <a href="#">友情链接</a>
+		</div>
+		<p>CopyRight &copy; 2021 衡阳市南华大学船山学院17级软件2班邓强 All Rights Reserverd</p>
+		<p>电话：1787-3443012</p>
+	</div>
+
+	<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../js/slide.js"></script>
+	<script type="text/javascript" src="../js/qs.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/axios.js"></script>
+	<script type="text/javascript" src="../js/websocket.js"></script>
+	<script src="../js/car.js"></script>
+<script type="text/javascript">
+	$(function(){
+		//检查登录
+		joberCheck();
+		
+	})
+	
+		let resume_info = new Vue({
+			el:"#resume_info",
+			data:{
+				updatapress:false,
+				savepress:false,
+				createpress:false,
+				resume:[],
+				nickname:"",
+				isresume:false,
+				isupdata:false
+			},
+			methods:{
+
+			},
+			mounted:function(){
+				axios.post("../login/getnickname", {params:{}}).then(result =>{
+					this.nickname = result.data.nickName;
+					
+	 				axios.get("../resume/finds", {params:{nickname:this.nickname}}).then(result =>{
+						console.log(result.data);
+						if(result.data.resume == 0){
+							console.log("你还没有简历...创建一份吧");
+						}else{
+							this.isresume = true;
+							this.resume = result.data.resume;
+						}				
+					})
+				})				
+			}
+		})
+	
+	//获取用户名
+	function getnickname(){
+		$.post("../login/getnickname", {}, function(data) {
+			//用户昵称
+			console.log("当前登录的用户名为：" + data.nickName);
+			$("#em").text(data.nickName);
+			$("#n").css('display', 'flex');
+			$("#loginout").css('display', 'inline');
+			$("#login").css('display', 'none');
+		}, "json");
+	}
+	
+	//下线
+	function loginout(){
+		$.post("../login/loginout", {}, function(data) {
+			console.log("下线了...");
+		}, "text");
+		window.location.reload();
+	}
+	
+	function joberCheck(){
+			//先发送请求获取登录用户id
+			$.get("../login/joberCheck", null, function(data){
+			if (data.code == 500) {
+				alert("请先登录...");
+				console.log("请先登录...");
+				$("#em").text("你好！请先登录...");
+				$("#n").css('display', 'flex');
+				location.href="../index_jober.html";
+				return;
+			}
+		
+			if (data.code == 200) {
+				//连上 websocket服务器
+				openWebSocket(data.msg);
+				getnickname();
+			}
+		},"json");
+	}
+	
+	</script>
+</body>
+</html>

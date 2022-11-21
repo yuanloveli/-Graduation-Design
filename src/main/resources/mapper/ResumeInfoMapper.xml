@@ -1,0 +1,37 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--注意:namespace中的值必须是对应接口的全路径， SQL语句中的id值必须是这个接口中对应方法名称 -->
+<mapper namespace="com.dq.springboot_recruit.mapper.IResumeInfoMapper">
+	<!-- 显示简历信息 -->
+	<select id="finds" resultType="ResumeInfo" parameterType="ResumeInfo">
+		select
+		realName, tel, age, email, school, education, major, rdescr, project, internship, skill, intention 
+		from 
+		resumeInfo 
+		where 
+		nickname = #{nickname}
+	</select>
+	
+	<!-- 创建简历信息 -->
+	<insert id="add" parameterType="ResumeInfo">
+		insert into resumeInfo values(0, #{nickname}, #{realName}, #{tel}, #{age}, #{email}, #{school}, #{education}, #{major}, #{rdescr}, #{project}, #{internship}, #{skill}, #{intention}, 1)
+	</insert>
+	
+	<!-- 修改简历信息 -->
+	<update id="updata" parameterType="ResumeInfo">
+		update resumeInfo set realName = #{realName}, tel = #{tel}, age = #{age}, email = #{email}, school = #{school}, education = #{education}, major = #{major}, rdescr = #{rdescr}, project = #{project}, internship = #{internship}, skill = #{skill}, intention = #{intention} where nickname = #{nickname}
+	</update>
+	
+	<!-- 查重简历电话和邮箱 -->
+	<select id="check" resultType="ResumeInfo" parameterType="ResumeInfo">
+		select
+		tel, email 
+		from 
+		resumeInfo 
+		where 
+		(email = #{email} or tel = #{tel}) and nickname != #{nickname}
+	</select>
+</mapper>

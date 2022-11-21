@@ -1,0 +1,271 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-注册</title>
+ <link rel="shortcut icon" href="images/copylogo.png">
+ <link rel="stylesheet" href="css/reset.css">
+ <link rel="stylesheet" href="css/reg.css">
+ <link rel="stylesheet" href="css/unlock.css">
+ <link rel="stylesheet" href="css/foot.css">
+ <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+ <script src="js/unlock.js"></script>
+</head>
+
+<body>
+	<!-- 注册布局 -->
+	<div class="register_con">
+		<div class="l_con fl">
+        	 <a href="#" class="reg_logo fr"><img src="images/logo.png"></a>
+        	 <div class="reg_slogan fr">平步青云 · 前程似锦</div>
+       		 <div class="reg_banner fr"></div>
+        </div>
+
+		<div class="r_con fr">
+        	<div class="reg_title clearfix">
+            	<h1 class="fl">求职者注册</h1>
+            	<a href="login.html" class="fr">登录</a>
+            	<a href="register_company.html" class="fr1" >企业注册</a>
+            </div>
+        	<div class="reg_form clearfix">
+             	<form>
+                    <ul>
+                        <li>
+                            <label for="nickname">用户名:</label>
+                            <input type="text" id="nickname" name="nickname" placeholder="请输入您的用户名" required autocomplete="off">
+                            <span class="error_tip">提示信息</span>
+                        </li>
+                        <li>
+                            <label for="pwd">密码:</label>
+                            <input type="password" id="pwd" name="pwd" placeholder="请输入6~15位字母、数字还可包含特殊字符" autocomplete="off">
+                            <span class="error_tip">提示信息</span>
+                        </li>
+                         <li>
+                            <label for="email">邮箱:</label>
+                            <input type="text" id="email" name="email" placeholder="请输入有效的邮箱地址" autocomplete="off">
+                            <input type="button" id="getCode" onclick="sendCode()" value="获取验证码">
+                            <span class="error_tip yzm_tip">提示信息</span>
+                        </li>
+                        <li>
+                            <label for="yzm">验证码:</label>
+                            <input type="text" id="yzm" name="yzm" placeholder="请输入验证码" autocomplete="off">
+                            <span class="error_tip" id="error_yzm">验证码错误</span>
+                        </li>
+                        <li>
+                            <label for="tel">电话号码:</label>
+                            <input type="text" id="tel" name="tel" placeholder="请输入以1开头的11位有效电话号码" autocomplete="off">
+                            <span class="error_tip yzm_tip" >提示信息</span>
+                        </li>
+                        <li  class="row">
+                        	<!-- 滑块验证-->
+                            <div class="bar"></div>
+                        </li>
+                        <li class="agreement">
+                            <input type="checkbox" id="allow" name="allow" checked>
+                            <label for="allow">同意<a href="#">"兼职招聘系统用户使用协议"</a></label>
+                            <span class="error_tip2">提示信息2</span>
+                        </li>
+                         <li>
+                            <input type="button" id="reg" name="reg" onClick="checkyzm()" value="注 册">
+                            <span class="error_tip">提示信息3</span>
+                        </li>
+                    </ul>
+                </form>
+        	</div>
+        </div>
+	</div>
+    
+    <!-- 版权所有 -->
+    <div class="footer">
+    	<div class="foot_link">
+        	<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我们</a> <span> | </span>
+            <a href="#">招聘广告</a> <span> | </span>
+            <a href="#">友情链接</a>
+        </div>
+    	<p>CopyRight &copy; 2022  All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    <script src="js/register.js"></script>
+    <script>
+    	$('.bar').slideToUnlock({
+		});
+    </script>
+ 
+    <script>
+    function register(){		    	
+		//获取用户名
+		var nickname = $.trim($("#nickname").val());
+		//获取密码
+		var pwd = $.trim($("#pwd").val());
+		//获取手机号码
+		var tel = $.trim($("#tel").val());
+		//获取email
+		var email = $.trim($("#email").val());
+
+		console.log("用户名："+nickname+"---密码："+pwd+"---邮箱："+email+"---手机号："+tel);
+		
+		if(nickname == "" || pwd == "" || email == "" || tel == "") {
+			$("#reg").next().html("请完整的填写信息...");
+			$("#reg").next().show();
+			return;
+		}
+		
+		console.log("正在注册账号信息...");
+		$.post("register/joberRegister",{nickName:nickname,pwd:pwd,tel:tel,email:email},function(data){
+		if (data == 1) {
+			//跳转转网页
+			$("#reg").next().html("注册成功，请登录");
+			$("#reg").next().show();
+			
+		} else{
+			$("#reg").next().html("注册失败");
+			$("#reg").next().show();
+		}
+		},"text"); 
+	}
+
+	function sendCode() {
+		console.log('正在发送验证码...');
+		var email = $("#email").val();
+		var nickname = $("#nickname").val();
+		
+
+		$("#email").attr("readonly", "true");
+		$("#nickname").attr("readonly", "true");
+		
+		console.log("用户名："+nickname+"===邮箱："+email);
+		
+		if(email == ""){
+			$("#email").next().next().html("请输入邮箱...");
+			$("#email").next().next().show();
+			
+			$("#email").removeAttr("readonly");
+			$("#nickname").removeAttr("readonly");
+			return;
+		}
+		
+		$("#getCode").attr("disabled", "true");
+		
+		$.post("email/code", {receiveEmail:email, nickname:nickname}, function(data){
+			data = parseInt($.trim(data));
+			if(data > 0) {
+				var time = 180;
+				console.log('发送验证码动作完成...');
+				var timeTask = setInterval(function(data) {
+					console.log('正在倒数...');
+					if(time > 0) {
+						time --;
+						document.getElementById("getCode").value = time + 's';//text(time + 's');
+					}else {
+						$("#email").removeAttr("readonly");
+						$("#nickname").removeAttr("readonly");
+						$("#getCode").removeAttr("disabled");//text("重新发送").attr("href", "javascript:sendCode()");
+						document.getElementById("getCode").value = '重新发送';
+						clearInterval(timeTask);
+					}
+				}, 1000);
+			}else {
+				$("#email").removeAttr("readonly");
+				$("#nickname").removeAttr("readonly");
+				$("#getCode").removeAttr("disabled");//text("重新发送").attr("href", "javascript:sendCode()");
+				document.getElementById("getCode").value = '重新发送';
+			}
+		}, "text");
+	}
+	
+	function checkyzm() {
+		var code = $.trim($("#yzm").val());
+		
+		if(code == "") {
+			$("#yzm").next().html("请输入验证码...");
+			$("#yzm").next().show();
+			return;
+		}
+		
+		$("#reg").attr("disabled", "true");
+		
+		var email = $.trim($("#email").val());
+		var nickname=$.trim($("#nickname").val());
+		var code=$.trim($("#yzm").val());
+		var tel = $.trim($("#tel").val());
+		
+		console.log("用户名："+nickname+"---验证码："+code+"---邮箱："+email+"---手机号："+tel);
+		
+		if(code == "") {
+			$("#yzm").next().html("请输入验证码...");
+			$("#yzm").next().show();
+		}
+		
+		console.log("开始检查验证码是否正确...");
+		$.post("email/check", {email:email, code:code}, function(data){
+			data = parseInt($.trim(data));
+			if(data == -2) {
+				$("#yzm").next().html("验证码已过期...");
+				$("#yzm").next().show();
+				$("#reg").removeAttr("disabled");
+				console.log("验证码已过期...");
+			}else if(data == -1) {
+				$("#yzm").next().html("验证码错误...");
+				$("#yzm").next().show();
+				$("#reg").removeAttr("disabled");
+				console.log("验证码错误...");
+			}else {
+				//验证码正确要隐藏
+				$("#yzm").next().hide();
+				console.log("验证码正确...");
+				checkInfo();
+			}	
+		},"text")
+	}
+
+	function checkInfo() {
+		$("#reg").attr("disabled", "true");
+
+		var email = $.trim($("#email").val());
+		var nickname=$.trim($("#nickname").val());
+		var pwd = $.trim($("#pwd").val());
+		var tel = $.trim($("#tel").val());
+		
+		console.log("用户名："+nickname+"---邮箱："+email+"---手机号："+tel);	
+		console.log("开始检查用户信息是否重复...");
+		//查重
+		$.ajax({
+   			url : "register/joberCheck",
+   			type : "post",
+   			async: false,
+   			data:{nickName:nickname,pwd:pwd,tel:tel,email:email},
+   			success : function(data) {
+   				console.log(data);
+   				
+   				console.log("data.email:" + data.email +  "   data.nickName:" + data.nickName + "  data.tel:" + data.tel);
+   				
+   				//开始判断是哪一个属性重复了
+   				if(data.email == email){
+   					//邮箱重复
+   					console.log("邮箱已被注册，请更换邮箱");
+   					$("#email").next().next().html("邮箱已被注册，请更换邮箱");
+   					$("#email").next().next().show();
+   				}
+   				else if(data.nickName == name){
+   					console.log("用户名已被注册，请更换用户名");
+   					$("#nickname").next().html("用户名已被注册，请更换用户名");
+   					$("#nickname").next().show();
+   				}
+   				else if(data.tel == tel){
+   					console.log("电话号码已被注册，请更换电话号码");
+   					$("#tel").next().html("电话号码已被注册，请更换电话号码");
+   					$("#tel").next().show();
+   				}
+   				else{
+   	   				console.log("用户信息在数据库信息中没有重复");
+   	 				register();
+   				}
+   			}
+   		})
+	}
+	
+</script>
+    
+</body>
+</html>

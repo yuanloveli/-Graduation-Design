@@ -1,0 +1,250 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-我收到的简历</title>
+ <link rel="shortcut icon" href="../images/copylogo.png">
+ <link rel="stylesheet" href="../css/reset.css">
+ <link rel="stylesheet" href="../css/main.css">
+ <link rel="stylesheet" href="../css/order.css">
+ <link rel="stylesheet" href="../css/delivery.css" type="text/css">
+ <link rel="stylesheet" href="../css/layer-animate.css" type="text/css">
+</head>
+
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+	 	<div class="header">
+	 		<div class="welcome fl">欢迎来到兼职招聘系统</div>
+	 		<div class="fr">
+	         	<div id="n" class="login_info fl"> 欢迎企业用户：<p id="em" style="margin-right: 15px; color:blue">y c</p>
+	             </div>
+	             <div class="login_btn fl" >
+	             	<a href="login.html" id="login">登录</a>
+	             	<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display:none" onclick="loginout()">
+	                 <span> | </span>
+	                 <a href="../register_company.html">注册</a>
+	             </div>
+	         	 <div class="user_link fl">
+	                 <span> | </span>
+	                 <a href="../index_company.html">首页</a>
+	                 <span> | </span>
+	                 <a href="publish_position.html">发布职位</a>
+	                 <span> | </span>
+	                 <a href="received_resume.html">我收到的简历</a>
+	        		 </div> 
+	          </div>  
+	 	</div>
+	 </div>
+	 
+	 	<!-- 搜索框-->
+	<div class="search_bar clearfix">
+		<a href="../index_jober.html" class="logo fl"><img
+			src="../images/logo.png"></a>
+		<div class="">
+		</div>
+	</div>
+     
+   	<!-- 订单列表 -->
+	<div class="app-wrap-3ZUYF6Nwp9" id="app">
+	<span style="margin-left: 300px; font-size: 20px;color: #7dca0e;">收到的简历：</span>
+		<div v-if="delivery != 0" v-for="(d,index) in delivery" class="application-1CA5Z4XpKm" style="margin: auto;border: 1px solid;margin-top: 20px;margin-bottom: 20px;background-color: #fff;">
+			<div class="img-div-1kEpVJw4TY">
+				<img style="width: 100%;height: 100%;"src="../images/head.png">
+			</div>
+			<div class="desc-3dKupfEm8_">
+				<div class="org-name-aNJtxS1d0a">
+					<span>求职者：{{d.nickname}}&nbsp&nbsp于 {{d.ddate}} 投递 {{d.companyname}}</span>
+				</div>
+				<div class="job-title-3T3L3-9bTZ">
+					<span>职位：{{d.pname}}</span>
+				</div>
+				<div class="status-1vk53jtlCG">
+					<div v-if="d.status == 1" class="stage-31wETRI5iS sd-foundation-body-tertiary-2R1-Y">
+						状态：<span class="application-status-fweyTc6QyA">等待筛选</span>
+					</div>
+					<div v-if="d.status == 2" class="stage-31wETRI5iS sd-foundation-body-tertiary-2R1-Y">
+						状态：<span class="application-status-fweyTc6QyA">已通过</span>
+					</div>
+					<div v-if="d.status == 3" class="stage-31wETRI5iS sd-foundation-body-tertiary-2R1-Y">
+						状态：<span class="application-status-fweyTc6QyA">已拒绝</span>
+					</div>
+					<div>
+						<button type="button" class="dq4" @click="lookResume(d.nickname)">查看简历</button>
+						<div class="btn btn3" style="display: inline;">
+							<button v-if="d.status == 1" type="button" class="dq4" @click="approved(d.nickname,d.dno,index)">通过审核</button>
+							<button v-if="d.status == 1" type="button" class="dq4" @click="refuse(d.nickname,d.dno,index)">拒绝简历</button>
+							<button v-if="d.status == 2" type="button" class="dq4">已通过</button>
+							<button v-if="d.status == 3" type="button" class="dq4">已拒绝</button>
+						</div>
+					</div>
+				</div>
+			</div>
+		</div>
+		<div v-if="delivery == 0" class="application-1CA5Z4XpKm" style="margin: auto;border: 1px solid;margin-top: 20px;margin-bottom: 20px;background-color: #fff;">
+			<div class="img-div-1kEpVJw4TY">
+				<img style="width: 100%;height: 100%;"src="../images/defaultlogo.jpg">
+			</div>
+			<div class="desc-3dKupfEm8_">
+				<div class="org-name-aNJtxS1d0a">
+					<span>求职者：xx于 x年x月x日 投递 xx公司</span>
+				</div>
+				<div class="job-title-3T3L3-9bTZ">
+					<span>暂无收到简历信息</span>
+				</div>
+				<div class="status-1vk53jtlCG">
+					<div class="stage-31wETRI5iS sd-foundation-body-tertiary-2R1-Y">
+						状态：<span class="application-status-fweyTc6QyA">无</span>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+        
+    <!-- 版权所有 -->
+	<div class="footer">
+    	<div class="foot_link">
+    		<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我们</a> <span> | </span>
+            <a href="#">招聘人才</a> <span> | </span>
+            <a href="#">友情链接</a> 
+    	</div>
+    	<p>CopyRight &copy; 2021 衡阳市南华大学船山学院17级软件2班邓强 All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+<script src='../js/focus-visible.min.js'></script>
+<script src='../js/ajaxzip3.js'></script>
+<script src='../js/moment.min.js'></script>
+<script src="../js/script.js"></script>
+<script type="text/javascript" src="../js/slide.js"></script>
+<script type="text/javascript" src="../js/qs.js"></script>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript" src="../js/axios.js"></script>
+<script type="text/javascript" src="../js/websocket.js"></script>
+<script type="text/javascript" src="../js/method.js"></script>
+<script type="text/javascript">
+
+var nickname = "";
+
+$(function(){
+	//检查登录
+	companyCheck();
+})
+
+	let resume_info = new Vue({
+		el:"#app",
+		data:{
+			delivery : {},
+			nickname : "",	
+			companyname : ""
+		},
+		methods:{
+			lookResume : function(nickname){
+				console.log("查看的简历的求职者昵称:"+nickname);
+				window.open("resume_company.html#"+nickname);
+			},
+			approved : function(nickname,dno,index){
+				var obj={
+				        type:"showSweetAlert",
+				        title:"确认通过简历",
+				        content:"<div>你确定要通过"+this.delivery[index].nickname+"的简历吗？</div><p id=dqtis style=color:red;></p>",
+				        btn:["取消","确认"],
+						callBack2:function(){
+							console.log("通过的求职者昵称:"+nickname+"投递编号为："+dno);	
+							axios.get("../delivery/approved", {params:{dno:dno,nickname:nickname}}).then(result =>{
+								if(result.data.approved == 0){
+									$("#dqtis").text("批准简历成功...");
+									console.log("批准简历失败...");
+								}else{
+									console.log("批准简历成功...");
+									$("#dqtis").text("批准简历成功...");
+								}
+							})
+				        }
+				    };
+				    method.msg_layer(obj);
+			},
+			refuse : function(nickname,dno,index){
+				var obj={
+				        type:"showSweetAlert",
+				        title:"确认拒绝简历",
+				        content:"<div>你确定要拒绝"+this.delivery[index].nickname+"的简历吗？</div><p id=dqtis style=color:red;></p>",
+				        btn:["取消","确认"],
+						callBack2:function(){
+							console.log("拒绝的求职者昵称:"+nickname+"投递编号为："+dno);	
+							axios.get("../delivery/refuse", {params:{dno:dno,nickname:nickname}}).then(result =>{
+								if(result.data.refuse == 0){
+									$("#dqtis").text("拒绝简历成功...");
+									console.log("拒绝简历失败...");
+								}else{
+									console.log("拒绝简历成功...");
+									$("#dqtis").text("拒绝简历成功...");
+								}
+							})
+				        }
+				    };
+				    method.msg_layer(obj);
+			}
+		},
+		mounted:function(){
+			axios.post("../login/getcompanynickname", {params:{}}).then(result =>{			
+				this.companyname = result.data.companyname;
+				axios.get("../delivery/findReceived", {params:{companyname:this.companyname}}).then(result =>{
+					if(result.data.DeliveryRecord == 0){
+						console.log("暂无信息...");
+					}else{
+						this.delivery = result.data.received;
+						console.log(result.data.received);
+					}
+				})	
+			})				
+		}
+	})
+
+//获取用户名
+function getnickname(){
+	$.post("../login/getcompanynickname", {}, function(data) {
+		//用户昵称
+		console.log("当前登录的用户名为：" + data.nickname);
+		nickname = data.nickname;
+		$("#em").text(data.nickname);
+		$("#n").css('display', 'flex');
+		$("#loginout").css('display', 'inline');
+		$("#login").css('display', 'none');
+		
+	}, "json");
+}
+
+//下线
+function loginout(){
+	$.post("../login/companyloginout", {}, function(data) {
+		console.log("下线了...");
+	}, "text");
+	window.location.reload();
+}
+
+function companyCheck(){
+		//先发送请求获取登录用户id
+		$.get("../login/companyCheck", null, function(data){
+		if (data.code == 500) {
+			alert("请先登录...");
+			console.log("请先登录...");
+			$("#em").text("你好！请先登录...");
+			$("#n").css('display', 'flex');
+			location.href="../index_jober.html";
+			return;
+		}
+	
+		if (data.code == 200) {
+			//连上 websocket服务器
+			openWebSocket(data.msg);
+			getnickname();
+		}
+	},"json");
+}
+</script>
+</body>
+</html>

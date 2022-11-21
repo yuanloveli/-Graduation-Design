@@ -1,0 +1,129 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+	<div id="admin_info">
+		<div id="forms" class="mt10">
+			<div class="box">
+				<div class="box_border">
+					<div class="box_center">
+						<form id="myform">
+							姓名：<input type="text" id="tname" class="input-text lh30"
+								size="40" autocomplete="off" />&nbsp;&nbsp; 密码：<input
+								type="password" id="pwd" class="input-text lh30" size="40"
+								autocomplete="off" />&nbsp;&nbsp; 手机号码：<input type="tel"
+								id="tel" class="input-text lh30" size="40" autocomplete="off" />&nbsp;&nbsp;
+							<input type="button" name="button" class="btn btn82 btn_save2"
+								@click="addAdminInfo" value="添加" />&nbsp;&nbsp;
+						</form>
+					</div>
+				</div>
+			</div>
+		</div>
+
+		<div id="table" class="mt10">
+			<div class="box span10 oh">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"
+					class="list_table">
+					<thead>
+						<tr>
+							<th width="20%">编号</th>
+							<th width="30%">姓名</th>
+							<th width="30%">联系方式</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody align="center">
+						<tr v-for="a in admin">
+							<td>{{a.aid}}</td>
+							<td>{{a.aname}}</td>
+							<td>{{a.tel}}</td>
+							<td><button @click="resetPwd(a.aid)">重置密码</button></td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../../js/qs.js"></script>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/axios.js"></script>
+	<script type="text/javascript">
+
+		let app = new Vue({
+			el:"#admin_info",
+			data:{
+				admin:{},
+				aname:"",
+				pwd:"",
+				tel:""
+			},
+			methods:{
+				addAdminInfo : function() {
+					this.aname=$.trim( $("#tname").val() );
+					this.pwd=$.trim( $("#pwd").val() );
+					this.tel=$.trim( $("#tel").val() );
+					
+					console.log(this.aname+this.pwd+this.tel);
+					
+					if (this.aname == "") {
+						alert("请输入管理员姓名...");
+						return;
+					}
+					
+					if (this.pwd == "") {
+						alert("请输入管理员密码...");
+						return;
+					}
+					
+					if (this.tel == "") {
+						alert("请输入管理员手机号码...");
+						return;
+					}
+					
+					axios.post("../../admin/add", qs.stringify({aname:this.aname, pwd:this.pwd, tel:this.tel})).then(result =>{
+						if(result.data > 0){
+							alert("添加成功!");
+							console.log("添加成功!");
+							$("#myform")[0].reset();
+							window.location.reload();
+						}else{
+							alert("添加失败!");
+							console.log("管理员信息有重复，添加失败!");
+							$("#myform")[0].reset();
+						}
+						
+					})					
+				},
+				resetPwd : function(aid)  {
+					if (confirm("你确定要重置密码吗？")) {
+						axios.post("../../admin/resetPwd", qs.stringify({aid:aid})).then(result =>{
+							if (result.data > 0) {
+								alert("管理员密码已重置为手机号码后 6 位...");
+							} else {
+								alert("管理员密码重置失败...");
+							}
+						})	
+					}
+				}
+			},
+			mounted:function(){
+				axios.get("../../admin/finds", {params:{}}).then(result =>{
+					if(result.data.admin == 0){
+						console.log("没有找到管理员信息");
+					}else{
+						console.log(result.data.admin);
+						this.admin = result.data.admin;
+					}					
+				})
+			}
+		})
+
+</script>
+</body>
+</html>

@@ -1,0 +1,85 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--注意:namespace中的值必须是对应接口的全路径， SQL语句中的id值必须是这个接口中对应方法名称 -->
+<mapper namespace="com.dq.springboot_recruit.mapper.IAdminInfoInfoMapper">
+	
+	<!-- 查询所有管理员信息 -->
+	<select id="finds" resultType="Admininfo">
+		select aid, aname, tel from admininfo
+	</select>
+	
+	<!-- 添加管理员信息 -->
+	<insert id="add" parameterType="AdminInfo">
+	    insert into admininfo values(0, #{aname}, #{pwd}, #{tel})
+	</insert>
+
+	<!-- 重置管理员密码 -->
+	<update id="resetPwd" parameterType="AdminInfo">
+	    update admininfo set pwd = right(tel,6)  where aid=#{aid}
+	</update>
+	
+	<!-- 修改管理员数据 -->
+	<update id="update" parameterType="AdminInfo">
+	    update admininfo set aname = #{aname},tel=#{tel} where aid=#{aid}; 
+	</update>
+	
+	<!-- 删除管理员数据 -->
+	<delete id="delete" parameterType="AdminInfo">
+	    delete from admininfo  where aid=#{aid}; 
+	</delete>
+	
+	<!-- 查询求职者信息 -->
+	<select id="findJobersInfo" resultType="JoberInfo">
+		select
+		jno, nickname, tel, email 
+		from 
+		joberinfo 
+	</select>
+	
+	<!-- 查询企业信息 -->
+	<select id="findCompany" resultType="CompanyInfo">
+		select
+		cno, nickname, companyname, companytype, companydescr, companypic, tel, email, status
+		from 
+		companyinfo 
+	</select>
+	
+	<!-- 修改求职者信息 -->
+	<update id="updateJober" parameterType="AdminInfo">
+	    update joberinfo set nickName = #{nickName},tel=#{tel},email=#{email} where jno=#{jno}; 
+	</update>
+	
+	<!-- 删除求职者信息 -->
+	<delete id="deleteJober" parameterType="AdminInfo">
+	    delete from joberinfo  where jno=#{jno}; 
+	</delete>
+
+	<!-- 修改企业信息 -->
+	<update id="updateCompany" parameterType="CompanyInfo">
+	    update CompanyInfo set nickname = #{nickname},companyname=#{companyname},companytype=#{companytype},companydescr=#{companydescr},tel=#{tel},email=#{email} where cno=#{cno}; 
+	</update>
+	
+	<!-- 删除企业信息 -->
+	<update id="deleteCompany" parameterType="CompanyInfo">
+	    update CompanyInfo set status = 2  where cno=#{cno}; 
+	</update>
+	
+	<!-- 删除企业信息 -->
+	<update id="reCompany" parameterType="CompanyInfo">
+	    update CompanyInfo set status = 1  where cno=#{cno}; 
+	</update>
+	
+	<!-- 查询职位信息 -->
+	<!-- 分页查询 -->
+	<select id="findPositionsByPage" resultType="java.util.LinkedHashMap">
+		select pno, pt.tname,pf.companyname,pname, pf.intro, pf.descr,price, place,pdate from positionsinfo pf, positiontype pt where pf.tno = pt.tno limit #{pageNo}, #{pageSize}
+	</select>
+	
+	<!-- 查询职位信息,处理总页数  为方便计数只查编号-->
+	<select id="findTotalPositions" resultType="PositionsInfo">
+		select pno from positionsinfo pf
+	</select>
+</mapper>

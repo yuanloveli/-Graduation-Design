@@ -1,0 +1,292 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>兼职招聘系统-修改职位信息</title>
+<link rel="shortcut icon" href="../images/copylogo.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+<link rel="stylesheet" href="../css/normalize.min.css">
+<link rel='stylesheet' href='../css/flatpickr.min.css'>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/reset.css">
+
+</head>
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+	 	<div class="header">
+	 		<div class="welcome fl">欢迎来到兼职招聘系统</div>
+	 		<div class="fr">
+	         	<div id="n" class="login_info fl"> 欢迎企业用户：<p id="em" style="margin-right: 15px; color:blue">d q</p>
+	             </div>
+	             <div class="login_btn fl" >
+	             	<a href="login.html" id="login">登录</a>
+	             	<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display:none" onclick="loginout()">
+	                 <span> | </span>
+	                 <a href="../register_company.html">注册</a>
+	             </div>
+	         	 <div class="user_link fl">
+	         	 	 <span> | </span>
+	                 <a href="../index_company.html">首页</a>
+	                 <span> | </span>
+	                 <a href="">发布职位</a>
+	                 <span> | </span>
+	                 <a href="received_resume.html">我收到的简历</a>
+	        		 </div> 
+	          </div>  
+	 	</div>
+	 </div>
+
+<div class="form"  id="app">
+  <h1 class="form__headline">填写详细职位信息</h1>
+  <div class="form__description">
+    <p>请输入必要事项后，进入确认画面。</p>
+  </div>
+  
+  <fieldset class="form__group">
+    <legend class="form__group-header">
+      <span class="form__group-label">职位名称和月薪</span>
+    </legend>
+    <div class="form__group-content">
+      <div class="form__name">
+        <div class="form__text-input">
+          <label class="visually-hidden" for="family-name">职位名称</label>
+          <p class="text-input">
+            <input id="pname" class="text-input__body" type="text" name="family-name" autocomplete="off" placeholder="职位名称" title="必须输入职位名称" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+      </div>
+      <p class="form__validation" data-validation="family-name" role="alert" aria-live="assertive"></p>
+      <p class="form__validation" data-validation="given-name" role="alert" aria-live="assertive"></p>
+    </div>
+  </fieldset>
+
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="address-level1">职位类型</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__select-box">
+        <div class="select-box">
+          <select v-model="tno"  @change="say($event)" id="tno" class="select-box__body" name="address-level1" title="请务必选择职位类型" required>
+            <option value="选择职位类型" disabled selected hidden>选择职位类型</option>
+            <option v-for="(types, index) in positionsType" :key="index" :value="types.tno">{{types.tname}}</option>
+          </select>
+        </div>
+      </div>
+      <p class="form__validation" data-validation="address-level1" role="alert" aria-live="assertive"></p>
+    </div>
+  </div>
+  
+  
+  <fieldset class="form__group">
+    <legend class="form__group-header">
+      <span class="form__group-label">工作地点和月薪</span>
+    </legend>
+    <div class="form__group-content">
+      <div class="form__name">
+        <div class="form__text-input">
+          <label class="visually-hidden" for="family-name">工作地点</label>
+          <p class="text-input">
+            <input id="place" class="text-input__body" type="text" name="family-name" autocomplete="off" placeholder="工作地点" title="必须输入工作地点" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+        <div class="form__text-input">
+          <label class="visually-hidden" for="given-name">月薪</label>
+          <p class="text-input">
+            <input id="price" class="text-input__body" type="text" name="given-name" autocomplete="off" placeholder="月薪" title="必须输入月薪" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+      </div>
+      <p class="form__validation" data-validation="family-name" role="alert" aria-live="assertive"></p>
+      <p class="form__validation" data-validation="given-name" role="alert" aria-live="assertive"></p>
+    </div>
+  </fieldset>
+
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="message">职位简介</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__textarea">
+        <div class="textarea js-flexible-textarea">
+          <textarea id="intro" class="textarea__body" name="message" title="请填写职位简介"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="message">职位技术要求</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__textarea">
+        <div class="textarea js-flexible-textarea">
+          <textarea id="descr" class="textarea__body" name="message" title="请填写技术要求"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+          
+  <div class="form__submit">
+  	<button class="button1" @click="updatePositions">保存</button> 
+  </div>
+  
+     <p style="margin-left: 375px; color: red;" id="result"></p>
+</div>
+
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+<script type="text/javascript" src="../js/qs.js"></script>
+<script type="text/javascript" src="../js/vue.js"></script>
+<script type="text/javascript" src="../js/axios.js"></script> 
+<script src='../js/focus-visible.min.js'></script>
+<script src='../js/ajaxzip3.js'></script>
+<script src='../js/moment.min.js'></script>
+<script src="../js/script.js"></script>
+<script type="text/javascript" src="../js/websocket.js"></script>
+<script type="text/javascript">
+
+var nickname = "";
+
+$(function(){
+	//检查登录
+	companyCheck();
+})
+
+		let app = new Vue({
+			el:"#app",
+			data:{
+				positionsType:{},
+				positions:[],
+				tno : 0,
+				pno : "",
+				pname : "",
+				price : "",
+				email : "",
+				place : "",
+				intro : "",
+				descr : "",
+				companyname : "",
+				cno : "",
+				pdate : ""
+			},
+			methods:{
+				updatePositions : function(){	
+
+					axios.post("../login/getcompanynickname",{params:{}}).then(result =>{
+						this.companyname = result.data.companyname;
+						this.cno = result.data.cno;
+						console.log(this.tno);
+
+						//获取数据
+						this.pname = $.trim($("#pname").val());
+						this.price = $.trim($("#price").val());
+						this.place = $.trim($("#place").val());
+						this.intro = $.trim($("#intro").val());
+						this.descr = $.trim($("#descr").val());
+						
+						if(this.pname == "" || this.price == "" || this.place == "" || this.intro == "" || this.descr == "" || this.tno == 0){
+							console.log("请完整填写信息...");
+							$("#result").text("请完整填写信息...");
+							return;
+						}
+						
+						
+						console.log("pno:"+pno+"企业名：" + this.companyname + "用户id：" + this.cno +"职位名称："+this.pname+"薪资："+this.price+"工作地点："+this.place+"职位类型："+this.tno+"职位技术要求："+this.intro+"职位介绍："+this.descr);
+						//发布职位
+						axios.get("../positions/updatePositions",{params:{pno:this.pno, pname:this.pname, tno:this.tno, price:this.price, intro:this.intro, place:this.place, descr:this.descr}}).then(result =>{
+							console.log(result.data.positions);
+							if(result.data.positions == 1){
+								console.log("修改职位信息成功...");
+								$("#result").text("修改职位信息成功！");
+							}else{
+								console.log("修改职位信息失败...");
+								$("#result").text("修改职位信息失败！");
+							}
+						})
+					})
+
+				},
+			
+				say: function(event) {
+					this.tno = event.target.value; //获取option对应的value值
+		             console.log("你选中了",this.tno)
+				}
+			},				
+			mounted:function(){
+				pno = window.location.hash.split("#")[1];
+				this.pno = pno;
+				axios.get("../positions/findDetails", {params:{pno:this.pno}}).then(result =>{
+					this.positions = result.data.positions;		
+					console.log("职位信息：" + result.data.positions);
+								
+					//显示数据					
+					$("#pname").val(result.data.positions.pname);
+					$("#price").val(result.data.positions.price);
+					$("#tno").val(result.data.positions.tname);
+					$("#place").val(result.data.positions.place);
+					$("#intro").val(result.data.positions.intro);
+					$("#descr").val(result.data.positions.descr);
+					
+				})
+				
+				axios.get("../positions/index", {params:{}}).then(result =>{
+					console.log(result.data.types);
+					this.positionsType = result.data.types;
+				})				
+			}
+		})
+
+//获取用户名
+function getnickname(){
+	$.post("../login/getcompanynickname", {}, function(data) {
+		//用户昵称
+		console.log("当前登录的企业名为：" + data.companyname);
+		console.log("当前登录的用户编号为：" + data.cno);
+		$("#em").text(data.nickname);
+		$("#n").css('display', 'flex');
+		$("#loginout").css('display', 'inline');
+		$("#login").css('display', 'none');
+	}, "json");
+}
+
+//下线
+function loginout(){
+	$.post("../login/companyloginout", {}, function(data) {
+		console.log("下线了...");
+	}, "text");
+	window.location.reload();
+}
+
+function companyCheck(){
+		//先发送请求获取登录用户id
+		$.get("../login/companyCheck", null, function(data){
+		if (data.code == 500) {
+			console.log("请先登录...");
+			alert("请先登录...");
+			$("#em").text("你好！请先登录...");
+			$("#n").css('display', 'flex');
+			location.href="../login.html";
+			return;
+		}
+	
+		if (data.code == 200) {
+			//连上 websocket服务器
+			openWebSocket(data.msg);
+			getnickname();
+		}
+	},"json");
+}
+
+</script>
+
+</body>
+</html>

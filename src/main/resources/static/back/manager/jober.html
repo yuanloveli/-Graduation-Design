@@ -1,0 +1,135 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>兼职招聘系统-用户信息</title>
+<link rel="shortcut icon" href="../../images/copylogo.png"
+	type="image/x-icon" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+ <div id = "jober_info">
+	<div id="table" class="mt10">
+		<div class="box span10 oh">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"
+					class="list_table">
+					<thead>
+						<tr>
+							<th width="5%">编号</th>
+							<th width="10%">昵称</th>
+							<th width="15%">联系方式</th>
+							<th width="15%">邮箱</th>
+							<th width="15%">操作</th>
+						</tr>
+					</thead>
+
+					<tbody id="jober_info" align="center">
+						<tr v-for = "(j,index) in jobers">
+							<td><input type="text" disabled="true" :id=j.jno :value=j.jno></td>
+							<td><input type="text" disabled="true" :id=j.nickName :value=j.nickName></td>
+							<td><input type="text" disabled="true" :id=j.tel :value=j.tel></td>
+							<td><input type="text" disabled="true" :id=dq(index) :value=j.email></td>
+							<td>
+								<button @click="updateJober(j.nickName, j.tel, dq(index))">修改</button>&nbsp;&nbsp;
+								<button @click="saveJober(j.jno, j.nickName, j.tel, dq(index))">保存</button>&nbsp;&nbsp;
+								<button @click="deleteJober(j.jno)">删除</button>&nbsp;&nbsp;
+							</td>
+						</tr>
+					</tbody>
+
+				</table>
+			<div class="page mt10">
+				<div class="pagination">
+					<ul id="pagination_info">
+						<li class="first-child active"><a href="javascript:void()"
+							onclick=" ">首页</a></li>
+						<li class="active"><a href="javascript:void()" onclick=" ">1</a></li>
+						<li class="last-child"><a href="javascript:void()"
+							onclick=" ">末页</a></li>
+					</ul>
+				</div>
+			</div>
+		</div>
+	</div>
+	</div>
+	<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+	<script type="text/javascript" src="../js/showpic.js"></script>
+	<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+	<script src="../../ckeditor/ckeditor.js"></script>
+	<script src="../js/jQuery.form.js"></script>
+	<script type="text/javascript" src="../../js/qs.js"></script>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/axios.js"></script>
+	<script type="text/javascript">
+
+
+let app = new Vue({
+	el:"#jober_info",
+	data:{
+		jobers:{},
+		nickName:"",
+		tel:"",
+		email:""
+	},
+	methods:{
+		updateJober : function (nickName, tel, email){
+
+			$("#"+nickName).attr('disabled',false);
+			$("#"+tel).attr('disabled',false);
+			$("#"+email).attr('disabled',false);			
+		},
+		saveJober : function(jno, nickName, tel, email){			
+			console.log("形参"+jno + "--" + nickName + "--" + tel + "--" + email);
+			
+ 			var jno1 = $.trim($("#"+jno).val());
+			var nickName1 = $.trim($("#"+nickName).val());
+			var tel1 = $.trim($("#"+tel).val());
+			
+			var email1 = $.trim($("#" + email).val());
+			
+			console.log("获取到值"+jno1 + "--" + nickName1 + "--" + tel1 + "---" + email1);
+			
+			axios.post("../../admin/updateJober", qs.stringify({jno:jno1, nickName:nickName1, tel:tel1, email:email1})).then(result =>{
+				if(result.data > 0){
+					alert("修改成功...");
+					window.location.reload();					
+				}else{
+					alert("求职者信息有重复，修改失败...");
+					window.location.reload();
+				}
+			}) 
+		},
+		deleteJober : function(jno){
+			if (confirm("你确定要删除吗？")) {
+			var jno = $.trim($("#"+jno).val());
+			axios.post("../../admin/deleteJober", qs.stringify({jno:jno})).then(result =>{
+					if(result.data > 0){
+						alert("删除成功...");
+						window.location.reload();
+					}else{
+						alert("求职者信息删除失败");
+					}
+				})
+				
+			}
+		},
+		dq : function(index){
+			return "e" + index;
+		}
+	},
+	mounted:function(){
+		axios.get("../../admin/findJobersInfo", {params:{}}).then(result =>{
+			if(result.data.jobers == 0){
+				console.log("没有找到求职者信息");
+			}else{
+				console.log(result.data.jobers);
+				this.jobers = result.data.jobers;
+			}					
+		})
+	}
+})
+
+</script>
+</body>
+</html>

@@ -1,0 +1,395 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="UTF-8">
+<title>兼职招聘系统-在线创建简历</title>
+<link rel="shortcut icon" href="../images/copylogo.png">
+<meta name="viewport" content="width=device-width,initial-scale=1,maximum-scale=1">
+
+<link rel="stylesheet" href="../css/normalize.min.css">
+<link rel='stylesheet' href='../css/flatpickr.min.css'>
+<link rel="stylesheet" href="../css/style.css">
+<link rel="stylesheet" href="../css/main.css">
+<link rel="stylesheet" href="../css/reset.css">
+
+</head>
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到兼职招聘系统</div>
+			<div class="fr">
+				<div id="n" class="login_info fl">
+					欢迎：
+					<p id="em" style="margin-right: 15px; color: blue">y c</p>
+				</div>
+				<div class="login_btn fl">
+					<a href="../login.html" id="login">登录</a> 
+					<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display: none" onclick="loginout()"> 
+					<span> | </span> 
+					<a href="../register_jober.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span> | </span> <a href="user.html">用户中心</a> 
+					<span> | </span> <a href="resume.html">我的简历</a> 
+					<span> | </span> <a href="delivery.html">我的投递</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+<div id="contant-form" class="form">
+  <h1 class="form__headline">填写个人简历信息</h1>
+  <div class="form__description">
+    <p>请输入必要事项后，进入确认画面。</p>
+  </div>
+  
+  <fieldset class="form__group">
+    <legend class="form__group-header">
+      <span class="form__group-label">您的姓名和年龄</span>
+    </legend>
+    <div class="form__group-content">
+      <div class="form__name">
+        <div class="form__text-input">
+          <label class="visually-hidden" for="family-name">姓名</label>
+          <p class="text-input">
+            <input id="realName" class="text-input__body" type="text" name="family-name" autocomplete="off" placeholder="姓名" title="必须输入姓氏" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+        <div class="form__text-input">
+          <label class="visually-hidden" for="given-name">年龄</label>
+          <p class="text-input">
+            <input id="age" class="text-input__body" type="text" name="given-name" autocomplete="off" placeholder="年龄" title="必须输入年龄" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+      </div>
+      <p class="form__validation" data-validation="family-name" role="alert" aria-live="assertive"></p>
+      <p class="form__validation" data-validation="given-name" role="alert" aria-live="assertive"></p>
+    </div>
+  </fieldset>
+  
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="tel">电话号码</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__text-input">
+        <p class="text-input">
+          <input id="tel" class="text-input__body -placeholder-visible" type="tel" name="tel" placeholder="(例) 090-0000-0000" autocomplete="off" pattern="\d{2,4}-?\d{2,4}-?\d{3,4}" title="请正确填写电话号码">
+          <span class="text-input__validator"></span>
+        </p>
+      </div>
+      <p class="form__notion">电话号码没有连字符（-），可以任意填写</p>
+      <p class="form__validation" data-validation="tel" role="alert" aria-live="assertive"></p>
+    </div>
+  </div>
+  
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="email">电子邮件地址</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__text-input">
+        <p class="text-input">
+          <input id="email" class="text-input__body" type="email" name="email" placeholder="(例) example@example.com" autocomplete="off" title="请正确填写邮件地址" required>
+          <span class="text-input__validator"></span>
+        </p>
+      </div>
+      <p class="form__validation" data-validation="email" role="alert" aria-live="assertive"></p>
+    </div>
+  </div>
+  
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="address-level1">学历</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__select-box">
+        <div class="select-box">
+          <select id="education" class="select-box__body" name="address-level1" title="请务必选择学历" required>
+            <option value="" disabled selected hidden>选择学历</option>
+            <option value="专科">专科</option>
+            <option value="本科">本科</option>
+            <option value="硕士研究生">硕士研究生</option>
+            <option value="博士">博士研究生</option>
+            <option value="其它">其它</option>
+          </select>
+        </div>
+      </div>
+      <p class="form__validation" data-validation="address-level1" role="alert" aria-live="assertive"></p>
+    </div>
+  </div>
+  
+  
+  <fieldset class="form__group">
+    <legend class="form__group-header">
+      <span class="form__group-label">您的学校和专业</span>
+    </legend>
+    <div class="form__group-content">
+      <div class="form__name">
+        <div class="form__text-input">
+          <label class="visually-hidden" for="family-name">学校</label>
+          <p class="text-input">
+            <input id="school" class="text-input__body" type="text" name="family-name" autocomplete="off" placeholder="学校" title="必须输入学校" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+        <div class="form__text-input">
+          <label class="visually-hidden" for="given-name">专业</label>
+          <p class="text-input">
+            <input id="major" class="text-input__body" type="text" name="given-name" autocomplete="off" placeholder="专业" title="必须输入专业" required>
+            <span class="text-input__validator"></span>
+          </p>
+        </div>
+      </div>
+      <p class="form__validation" data-validation="family-name" role="alert" aria-live="assertive"></p>
+      <p class="form__validation" data-validation="given-name" role="alert" aria-live="assertive"></p>
+    </div>
+  </fieldset>
+  
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="address-level2">意向岗位</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__text-input -wide">
+        <p class="text-input">
+          <input id="intention" class="text-input__body" type="text" name="address-level2" placeholder="意向岗位" autocomplete="off" title="必须输入意向岗位" required>
+          <span class="text-input__validator"></span>
+        </p>
+      </div>
+      <p class="form__validation" data-validation="address-level2" role="alert" aria-live="assertive"></p>
+    </div>
+  </div>
+
+
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="message">自我介绍</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__textarea">
+        <div class="textarea js-flexible-textarea">
+          <textarea id="rdescr" class="textarea__body" name="message" title="请填写自我介绍"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="message">专业技能</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__textarea">
+        <div class="textarea js-flexible-textarea">
+          <textarea id="skill" class="textarea__body" name="message" title="请填写专业技能"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="message">实习经历</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__textarea">
+        <div class="textarea js-flexible-textarea">
+          <textarea id="internship" class="textarea__body" name="message" title="请填写实习经历"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form__group">
+    <p class="form__group-header">
+      <label class="form__group-label" for="message">项目经历</label>
+    </p>
+    <div class="form__group-content">
+      <div class="form__textarea">
+        <div class="textarea js-flexible-textarea">
+          <textarea id="project" class="textarea__body" name="message" title="请填写项目经历"></textarea>
+        </div>
+      </div>
+    </div>
+  </div>
+  
+  <div class="form__submit">
+    <button class="button1" onclick="resume()">保存</button> 
+
+  </div>
+  
+     <p style="margin-left: 375px; color: red;" id="result"></p>
+</div>
+
+<script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+<script src='../js/focus-visible.min.js'></script>
+<script src='../js/ajaxzip3.js'></script>
+<script src='../js/moment.min.js'></script>
+<script src="../js/script.js"></script>
+<script type="text/javascript" src="../js/websocket.js"></script>
+<script type="text/javascript">
+
+var nickname = "";
+
+$(function(){
+	//检查登录
+	joberCheck();
+	
+	x = window.location.hash.split("#")[1];
+
+})
+
+function resume(){
+	
+	//获取数据
+	var realName = $.trim($("#realName").val());
+	var tel = $.trim($("#tel").val());
+	var age = $.trim($("#age").val());
+	var email = $.trim($("#email").val());
+	var school = $.trim($("#school").val());
+	var education = $.trim($("#education").val());
+	var major = $.trim($("#major").val());
+	var rdescr = $.trim($("#rdescr").val());
+	var project = $.trim($("#project").val());
+	var internship = $.trim($("#internship").val());
+	var skill = $.trim($("#skill").val());
+	var intention = $.trim($("#intention").val());
+	
+	console.log("昵称："+nickname+"姓名："+realName+"电话："+tel+"年龄："+age+"邮箱："+email+"学校："+school+"学历："+education+"专业："+major+"自我介绍："+rdescr+"项目经历："+project+"实习经历："+internship+"专业技能："+skill+"意向岗位："+intention);	
+	
+	if(realName == "" || tel == "" || age == "" || email == "" || school == "" || education == "" || major == "" || rdescr == "" || project == "" || internship == "" || skill == "" || intention == ""){
+		console.log("请完整填写信息...");
+		$("#result").text("请完整填写信息...");
+		return;
+	}
+	
+	//查重简历电话和邮箱
+	$.post("../resume/check", {nickname:nickname,email:email,tel:tel}, function(data) {
+		if(data == 1){
+			console.log("简历信息无重复...");
+					
+			if(x == 0){
+				//创建简历
+				console.log("创建简历");
+				$.post("../resume/add", {nickname:nickname,realName:realName,tel:tel,age:age,email:email,school:school,education:education,major:major,rdescr:rdescr,project:project,internship:internship,skill:skill,intention:intention}, function(data) {
+					console.log("结果为:" + data);
+					if(data == 1){
+						$("#result").text("保存成功！");
+					}else{
+						$("#result").text("保存失败...");
+					}
+				}, "json");
+			}else{				
+				console.log("修改简历");		
+				//开始修改
+				$.post("../resume/updata", {nickname:nickname,realName:realName,tel:tel,age:age,email:email,school:school,education:education,major:major,rdescr:rdescr,project:project,internship:internship,skill:skill,intention:intention}, function(data) {
+					console.log("结果为:" + data);
+					if(data == 1){
+						$("#result").text("保存成功！");
+					}else{
+						$("#result").text("保存失败...");
+					}
+				}, "json");
+			}
+			
+		}else{
+			console.log("简历信息重复...");
+			$("#result").text("简历手机号码或者邮箱信息重复，请修改...");
+		}
+	}, "json");
+
+}
+
+//获取用户名
+function getnickname(){
+	$.post("../login/getnickname", {}, function(data) {
+		//用户昵称
+		console.log("当前登录的用户名为：" + data.nickName);
+		nickname = data.nickName;
+		$("#em").text(data.nickName);
+		$("#n").css('display', 'flex');
+		$("#loginout").css('display', 'inline');
+		$("#login").css('display', 'none');
+		
+		if(x == 1){
+			show();
+		}
+	}, "json");
+}
+
+//下线
+function loginout(){
+	$.post("../login/loginout", {}, function(data) {
+		console.log("下线了...");
+	}, "text");
+	window.location.reload();
+}
+
+function joberCheck(){
+		//先发送请求获取登录用户id
+		$.get("../login/joberCheck", null, function(data){
+		if (data.code == 500) {
+			alert("请先登录...");
+			console.log("请先登录...");
+			$("#em").text("你好！请先登录...");
+			$("#n").css('display', 'flex');
+			location.href="../index_jober.html";
+			return;
+		}
+	
+		if (data.code == 200) {
+			//连上 websocket服务器
+			openWebSocket(data.msg);
+			getnickname();
+		}
+	},"json");
+}
+
+//查重简历电话和邮箱
+function check(email, tel){
+	$.post("../resume/check", {email:email,tel:tel}, function(data) {
+		if(data == 1){
+			console.log("简历信息无重复...");
+		}else{
+			console.log("简历信息重复...");
+			$("#result").text("简历手机号码或者邮箱信息重复，请修改...");
+		}
+	}, "json");
+}
+
+//显示原来的简历信息
+function show(){
+	
+	//显示原来的简历信息
+		console.log(nickname);
+		$.get("../resume/finds", {nickname:nickname}, function(data) {
+				console.log("简历信息：" + data.resume);
+				$("#realName").val(data.resume.realName);
+				$("#tel").val(data.resume.tel);
+				$("#age").val(data.resume.age);
+				$("#email").val(data.resume.email);
+				$("#school").val(data.resume.school);
+				$("#education").val(data.resume.education);
+				$("#major").val(data.resume.major);
+				$("#rdescr").val(data.resume.rdescr);
+				$("#project").val(data.resume.project);
+				$("#internship").val(data.resume.internship);
+				$("#skill").val(data.resume.skill);
+				$("#intention").val(data.resume.intention);
+
+		}, "json");
+
+}
+</script>
+
+</body>
+</html>

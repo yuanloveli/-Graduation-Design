@@ -1,0 +1,293 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>天天生鲜-忘记密码</title>
+ <link rel="shortcut icon" href="images/copylogo.png">
+ <link rel="stylesheet" href="css/reset.css">
+ <link rel="stylesheet" href="css/reg.css">
+ <link rel="stylesheet" href="css/unlock.css">
+ <link rel="stylesheet" href="css/foot.css">
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/login.css">
+ <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+ <script src="js/unlock.js"></script>
+</head>
+
+<body>
+	<!-- 注册布局 -->
+	<div class="register_con">
+		<div class="l_con fl">
+        	 <a href="#" class="reg_logo fr"><img src="images/logo.png"></a>
+        	 <div class="reg_slogan fr">平步青云 · 前程似锦</div>
+       		 <div class="reg_banner fr"></div>
+        </div>
+
+		<div class="r_con fr">
+        	<div class="reg_title clearfix">
+            	<h1 class="fl">忘记密码</h1>
+            	<a href="login.html" class="fr">登录</a>
+            </div>
+        	<div class="reg_form clearfix">
+             	<form>
+                    <ul>
+                        <li>
+                            <label for="nickname">用户名:</label>
+                            <input type="text" id="nickname" name="nickname" placeholder="请输入注册时的用户名" required autocomplete="off">
+                        </li>
+                        <li>
+                            <label for="email">邮箱:</label>
+                            <input type="text" id="email" name="email" placeholder="请输入注册时的邮箱地址" autocomplete="off">
+                             <input type="button" id="getCode" onclick="sendCode()" value="获取验证码">
+                            <span class="error_tip yzm_tip">提示信息</span>
+                        </li>
+                        <li>
+                            <label for="pwd">密码:</label>
+                            <input type="password" id="pwd" name="pwd" placeholder="请输入6~15位字母、数字还可包含特殊字符" autocomplete="off">
+                        </li>
+                        <li>
+                            <label for="yzm">验证码:</label>
+                            <input type="text" id="yzm" name="yzm" placeholder="请输入验证码" autocomplete="off">
+                            <span class="error_tip" id="error_yzm">验证码错误</span>
+                        </li>
+                        <li style="height: 40px;">
+                        	<label for="yzm">用户类型:</label>
+							<div class="more_input clearfix">
+								<div style="float: left; margin-top: 7px;"><input style="width: 10px;height: 20px;float: left" type="radio" name="login" id="jober" value=1>求职者</div> 
+								<div style="float: left; margin-top: 7px;"><input style="width: 10px;height: 20px;float: left" type="radio" name="login" id="company" value=2>企业</div> 
+								<span style="color: red; font-size : 14px; margin-top: 7px; float: left;"></span>
+							</div>
+						</li>
+                         <li>
+                            <input type="button" id="reg" name="reg" onClick="checkyzm()" value="确认">
+                            <span id="errmsg" class="error_tip">提示信息3</span>
+                        </li>
+                    </ul>
+                </form>
+        	</div>
+        </div>
+	</div>
+    
+    <!-- 版权所有 -->
+    <div class="footer">
+    	<div class="foot_link">
+        	<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我们</a> <span> | </span>
+            <a href="#">招聘广告</a> <span> | </span>
+            <a href="#">友情链接</a>
+        </div>
+    	<p>CopyRight &copy; 2019 衡阳市源辰信息科技有限公司 All Rights Reserverd</p>
+        <p>电话：0734-8355998 湘ICP备16015987号</p>
+    </div>
+    <script src="js/register.js"></script>    
+    <script>
+    function forgetPwd(){		    	
+		//获取密码
+		var pwd = $.trim($("#pwd").val());
+		//获取email
+		var email = $.trim($("#email").val());
+		
+		//获取用户类型
+		var type = $("input[name='login']:checked").val();
+
+		console.log("密码："+pwd+"---邮箱："+email);
+		
+		if(nickname == "" || pwd == "" || email == "") {
+			$("#reg").next().html("请完整的填写信息...");
+			$("#reg").next().show();
+			return;
+		}
+		
+		if (type == undefined){		//未选择用户类型
+			$("#company").next().html("&nbsp&nbsp&nbsp请选择用户类型!");
+			$("#company").next().show();		
+			console.log("请选择用户类型...");
+		}else if(type == 1){//求职者
+			console.log("正在修改密码...");
+			$.post("forgetPwd/joberUpdatePwd", {email:email, pwd:pwd}, function(data){
+				console.log(data);
+				if(data.jober == 0) {
+					$("#reg").next().html("密码修改失败...");
+					$("#reg").next().show();
+				}else{
+					$("#reg").next().html("密码修改成功...");
+					$("#reg").next().show();
+					alert("密码修改成功");
+					//检查信息无误后，进行页面跳转
+					 window.location.href="login.html";
+				}
+			},"text") 
+		}else if(type == 2){//企业
+			console.log("正在修改密码...");
+			$.post("forgetPwd/companyUpdatePwd", {email:email, pwd:pwd}, function(data){
+				console.log(data);
+				if(data.jober == 0) {
+					$("#reg").next().html("密码修改失败...");
+					$("#reg").next().show();
+				}else{
+					$("#reg").next().html("密码修改成功...");
+					$("#reg").next().show();
+					alert("密码修改成功");
+					//检查信息无误后，进行页面跳转
+					 window.location.href="login.html";
+				}	
+			},"text") 
+		}
+	}
+
+	function sendCode() {
+		console.log('正在发送验证码...');
+		var email = $("#email").val();
+		var nickname = $("#nickname").val();
+		
+
+		$("#email").attr("readonly", "true");
+		$("#nickname").attr("readonly", "true");
+		
+		console.log("用户名："+nickname+"===邮箱："+email);
+		
+		if(email == ""){
+			$("#email").next().next().html("请输入邮箱...");
+			$("#email").next().next().show();
+			
+			$("#email").removeAttr("readonly");
+			$("#nickname").removeAttr("readonly");
+			return;
+		}
+		
+		$("#getCode").attr("disabled", "true");
+		
+		$.post("email/code", {receiveEmail:email, nickname:nickname}, function(data){
+			data = parseInt($.trim(data));
+			if(data > 0) {
+				var time = 180;
+				console.log('发送验证码动作完成...');
+				var timeTask = setInterval(function(data) {
+					console.log('正在倒数...');
+					if(time > 0) {
+						time --;
+						document.getElementById("getCode").value = time + 's';//text(time + 's');
+					}else {
+						$("#email").removeAttr("readonly");
+						$("#nickname").removeAttr("readonly");
+						$("#getCode").removeAttr("disabled");//text("重新发送").attr("href", "javascript:sendCode()");
+						document.getElementById("getCode").value = '重新发送';
+						clearInterval(timeTask);
+					}
+				}, 1000);
+			}else {
+				$("#email").removeAttr("readonly");
+				$("#nickname").removeAttr("readonly");
+				$("#getCode").removeAttr("disabled");//text("重新发送").attr("href", "javascript:sendCode()");
+				document.getElementById("getCode").value = '重新发送';
+			}
+		}, "text");
+	}
+	
+	function checkyzm() {
+		var code = $.trim($("#yzm").val());
+		
+		if(code == "") {
+			$("#yzm").next().html("请输入验证码...");
+			$("#yzm").next().show();
+			return;
+		}
+		
+		$("#reg").attr("disabled", "true");
+		
+		var email = $.trim($("#email").val());
+		var nickname=$.trim($("#nickname").val());
+		var code=$.trim($("#yzm").val());
+		
+		console.log("用户名："+nickname+"---验证码："+code+"---邮箱："+email);
+		
+		if(code == "") {
+			$("#yzm").next().html("请输入验证码...");
+			$("#yzm").next().show();
+		}
+		
+		console.log("开始检查验证码是否正确...");
+		$.post("email/check", {email:email, code:code}, function(data){
+			data = parseInt($.trim(data));
+			if(data == -2) {
+				$("#yzm").next().html("验证码已过期...");
+				$("#yzm").next().show();
+				$("#reg").removeAttr("disabled");
+				console.log("验证码已过期...");
+			}else if(data == -1) {
+				$("#yzm").next().html("验证码错误...");
+				$("#yzm").next().show();
+				$("#reg").removeAttr("disabled");
+				console.log("验证码错误...");
+			}else {
+				//验证码正确要隐藏
+				$("#yzm").next().hide();
+				console.log("验证码正确...");
+				checkInfo();
+			}	
+		},"text")
+	}
+
+	function checkInfo() {
+		$("#reg").attr("disabled", "true");
+
+		var email = $.trim($("#email").val());
+		var nickname=$.trim($("#nickname").val());
+		var pwd = $.trim($("#pwd").val());
+		
+		console.log("用户名："+nickname+"---邮箱："+email);	
+		console.log("开始检查用户信息是否重复...");
+		
+		//获取用户类型
+		var type = $("input[name='login']:checked").val();
+		
+		if (type == undefined){		//未选择用户类型
+			$("#company").next().html("&nbsp&nbsp&nbsp请选择用户类型!");
+			$("#company").next().show();		
+			console.log("请选择用户类型...");
+
+		}else if(type == 1){//用户类型为求职者
+			//查是否有这个账号
+			$.ajax({
+	   			url : "forgetPwd/joberCheckforgetPwd",
+	   			type : "post",
+	   			async: false,
+	   			data:{nickName:nickname,email:email},
+	   			success : function(data) {
+	   				console.log(data);
+	   				if(data == null){
+	   					console.log("没有这个账号信息...");
+	   					$("#reg").next().html("输入的用户名或邮箱有误...");
+	   					$("#reg").next().show();
+	   				} else{
+	   	   				forgetPwd();
+	   				}
+	   			}
+	   		})
+		}else if(type == 2){
+			//查是否有这个账号
+			$.ajax({
+	   			url : "forgetPwd/companyCheckforgetPwd",
+	   			type : "post",
+	   			async: false,
+	   			data:{nickName:nickname,email:email},
+	   			success : function(data) {
+	   				console.log(data);
+	   				if(data == null){
+	   					console.log("没有这个账号信息...");
+	   					$("#reg").next().next().html("输入的用户名或邮箱有误...");
+	   					$("#reg").next().show();
+	   				} else{
+	   	   				forgetPwd();
+	   				}
+	   			}
+	   		})
+		}
+	}
+
+
+   
+    </script>
+    
+</body>
+</html>

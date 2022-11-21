@@ -1,0 +1,185 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-登录</title>
+<link rel="icon" href="images/copylogo.png">
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/login.css">
+</head>
+
+<body>
+	<!-- logo区区域 -->
+	<div class="login_top">
+    	<a href="index_jober.html" class="login_logo"><img src="images/logo02.png"></a>
+    </div>
+	
+	<!-- 内容区域 -->
+    <div class="login_form_bg">
+    	<div class="login_form_wrap clearfix">
+        	<div class="login_banner fl"></div>
+            <div class="slogn fl">平步青云 · 前程似锦</div>	
+            <div class="login_form fr">
+                <div class="login_title	clearfix">
+                    <h1 class="fl">用户登陆</h1>
+                    <a href="register_jober.html" class="fl">立即注册</a>
+                </div>
+                <!-- 登录区域 -->
+				<div id="app">
+					<div class="form_input clearfix">
+						<form>
+							<ul>
+								<li>
+									<input type="text" v-model="nickname" class="name_input" id="nickname" placeholder="请输入用户名" autocomplete="off">
+									<div class="user_error" id="user_error">输入错误</div>
+								</li>
+								<li>
+									<input type="password" v-model="pwd" class="pwd_input" id="pwd" placeholder="请输入密码">
+									<div class="pwd_error" id="pwd_error">账号或密码错误，请确认后重新登录...</div>
+								</li>
+								<li>
+									<div>
+										<input type="text" name="yzm" id="yzm" class="yzm_input" placeholder="请输入验证码" autocomplete="off"> 
+										<img class="code" src="verifycode/checkCode" id="checkCode" title="看不清，点击换一张" onclick="getPic()" onload="getVerify()">
+									</div>
+									<div class="code_error" id="code_error">验证码错误，注意大小写</div>
+									<div class="code_error" id="success"></div>
+								</li>
+								<li>
+									<div class="more_input clearfix">
+										<input type="radio" name="login" id="jober" value=1> 求职者 
+										<input type="radio" name="login" id="company" value=2> 企业 
+										<span style="color: red; font-size : 14px" v-if="status[2]">请选择用户类型!</span>
+										<a href="forgetPwd.html">忘记密码</a>
+									</div>
+								</li>
+								<li>
+									<input type="button" value="登录" class="submit_input" @click="login">
+								</li>
+							</ul>
+						</form>
+					</div>
+				</div>
+			</div>
+         </div>
+    </div>
+	
+	<!-- 版权所有-->
+    <div class="footer">
+    	<div class="foot_link">
+        	<a href="#">关于我们</a><span> | </span>
+        	<a href="#">联系我们</a><span> | </span>
+        	<a href="#">招聘广告</a><span> | </span>
+            <a href="#">友情链接</a><span> | </span>
+            <a href="back/index.html" target="_black">后台管理</a>
+        </div>
+    	<p>CopyRight &copy; 2022  All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    
+    
+	<script src="js/jquery-3.4.1.min.js"></script>
+	<script src="js/vue.js"></script>
+	<script src="js/qs.js"></script>
+	<script src="js/axios.js"></script>
+	<script src="js/websocket.js"></script>
+	
+	
+	<script>
+		var verify;
+		//验证码
+		getPic = function() {
+			$("#checkCode").attr("src","verifycode/checkCode?flag=" + Math.random());
+			getVerify();
+		}
+		
+		//验证码
+		getVerify = function() {
+			$.post("verifycode/getVerify", {}, function(data) {
+				verify = data;
+				console.log("图片上的验证码为:" + verify);
+			}, "text");
+		}
+		
+		
+
+		let vue = new Vue({
+			el : "#app",
+			data : {
+				nickname : "",
+				pwd : "",
+				status : [false, false, false]
+			},
+			methods : {
+				login : function(){
+				
+					var user = $("input[name='login']:checked").val();
+					//获取用户名
+					var nickname = $.trim($("#nickname").val());
+					//获取密码
+					var pwd = $.trim($("#pwd").val());
+					//获取验证码
+					var yzm = $("#yzm").val();
+
+					console.log("被选中的是：" + user + "输入的用户名："+ nickname + "密码：" + pwd + "验证码：" + yzm);
+					
+					if (user == undefined){		//未选择用户类型
+						console.log("请选择用户类型...");
+						Vue.set(vue.status, 2, true);
+					} else if (yzm != verify) {	//验证码错误
+						Vue.set(vue.status, 2, false);
+						document.getElementById("code_error").style.visibility = "visible";//显示
+					} else if (user == 1) {		//用户类型为求职者
+						Vue.set(vue.status, 2, false);
+						axios.post("login/joberLogin", qs.stringify({nickName:this.nickname, pwd:this.pwd})).then(result =>{
+							if (result.data.code == 200) {
+								var time = 3;
+								var timeTask = setInterval(function(data) {									
+									if(time > 0) {
+										time --;
+										document.getElementById("success").style.visibility = "visible";//显示
+										document.getElementById("success").innerHTML = '登录成功...'+time+'秒后跳转页面';
+										console.log('登录成功...'+time+'秒后跳转页面');
+									} else{
+										//跳转转网页到求职者首页
+										window.location.href = "index_jober.html";
+									}
+								}, 1000);
+							} else if (result. data.code == 500) {
+								document.getElementById("pwd_error").style.visibility = "visible";//显示
+								getPic();
+							}
+						})
+					} else if (user == 2){		//用户类型为企业
+						Vue.set(vue.status, 2, false);
+						axios.post("login/companyLogin", qs.stringify({nickname:this.nickname, pwd:this.pwd})).then(result =>{
+							if (result.data.code == 200) {
+								var time = 3;
+								var timeTask = setInterval(function(data) {									
+									if(time > 0) {
+										time --;
+										document.getElementById("success").style.visibility = "visible";//显示
+										document.getElementById("success").innerHTML = '登录成功...'+time+'秒后跳转页面';
+										console.log('登录成功...'+time+'秒后跳转页面');
+									} else{
+										//跳转转网页到企业首页
+										window.location.href = "index_company.html";
+									}
+								}, 1000);
+							} else if (result.data.code == 500) {
+								document.getElementById("pwd_error").style.visibility = "visible";//显示
+								getPic();
+							} else if (result.data.code == 501) {
+								alert("你的账号有违规，已被封禁，请联系管理员...");
+								document.getElementById("pwd_error").style.visibility = "visible";//显示
+								getPic();
+							}
+						})
+					}
+
+				}
+			}
+		})
+	</script>
+</body>
+</html>

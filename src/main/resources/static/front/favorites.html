@@ -1,0 +1,202 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-我的收藏</title>
+ <link rel="shortcut icon" href="../images/copylogo.png">
+ <link rel="stylesheet" href="../css/reset.css">
+ <link rel="stylesheet" href="../css/main.css">
+ <link rel="stylesheet" href="../css/pay.css">
+ <link rel="stylesheet" href="../css/goods.css">
+</head>
+
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到兼职招聘系统</div>
+			<div class="fr">
+				<div id="n" class="login_info fl">欢迎：<p id="em" style="margin-right: 15px; color: blue">y c</p>
+				</div>
+				<div class="login_btn fl">
+					<a href="../login.html" id="login">登录</a> 
+					<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display: none" onclick="loginout()"> 
+					<span> | </span> 
+					<a href="../register_jober.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span> | </span> <a href="user.html">用户中心</a> 
+					<span> | </span> <a href="resume.html">我的简历</a> 
+					<span> | </span> <a href="delivery.html">我的投递</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+    <!-- 全部商品分类 --> 
+    <div class="navbar_con">
+    	<div class="navbar clearfix">
+    		<div class="subnav_con fl">
+            	<h1 class="fl">我的收藏</h1>
+            </div>
+    		<ul class="navlist fl">
+    			<li><a href="../index_jober.html">首页</a></li>
+    		</ul>
+    	</div>
+    </div>
+    
+    <!-- 面包屑导航 --> 
+    <div class="breadcrumb" id="breadcrumb">
+     	<a style="margin-left: 109px; line-height: 68px;">我收藏的职位：</a>
+    </div>
+     
+    <!-- 职位信息展示区域-->
+     <div class="main_wrap clearfix">
+	   <div id="positions_info">
+        <!-- 热门类型查询 -->
+        <div class="r_wrap fr clearfix">
+        	<ul class="goods_type_list clearfix show1">
+          		<li v-for="pd in positions">
+                    <a :href="'../details.html#' + pd.pno" target="_blank"><img :src="'../'+pd.companypic"></a>
+                    <h4><a :href="'../details.html#' + pd.pno" target="_blank">{{pd.pname}}</a></h4>
+                    <div class="operate">
+                    	<span class="prize">月薪：{{pd.price}}</span>
+                        <span class="unit">{{pd.place}}</span>
+                    </div>
+                </li>               
+            </ul>
+            
+			<!-- 分页栏-->
+			<div class="pagenation">
+				<ul>
+					<li><a @click="findBypage(1,pageSize)">首页</a></li>
+					<li v-for="tp in totalPage"><a @click="findBypage(tp,pageSize)" :class={"active":tp==pageNo}>{{tp}}</a></li>
+					<li><a @click="findBypage(totalPage,pageSize)">尾页</a></li>
+				</ul>
+			</div>
+        </div>
+   	   </div>
+     </div>
+     
+ 
+      
+    <!-- 版权所有 -->
+	<div class="footer">
+    	<div class="foot_link">
+    		<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我么</a> <span> | </span>
+            <a href="#">招聘人才</a> <span> | </span>
+            <a href="#">友情链接</a> 
+    	</div>
+    	<p>CopyRight &copy; 2021 衡阳市南华大学船山学院17级软件2班邓强 All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    
+    <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="../js/slide.js"></script>
+    <script type="text/javascript" src="../js/qs.js"></script>
+    <script type="text/javascript" src="../js/vue.js"></script>
+    <script type="text/javascript" src="../js/axios.js"></script> 
+    <script type="text/javascript" src="../js/websocket.js"></script>
+<script type="text/javascript">
+$(function(){
+	var pageNo = 1;
+	var pageSize = 5;
+	var totalSize = 0;
+	var totalPage = 0;
+	//检查登录
+	joberCheck();
+})
+
+
+	let positions_info = new Vue({
+		el:"#positions_info",
+		data:{
+			positions:{},
+			nickname : "",
+		    pageNo : 1,		//当前页数
+		    pageSize : 5,	//每页显示几条
+		    totalSize : 0,	//总共多少条数据
+		    totalPage : 0,	//总页数
+		},
+		methods:{
+			findBypage : function(pageNo, pageSize){
+				axios.get("../favorites/findBypage", {params:{pageNo:pageNo, pageSize:pageSize}}).then(result =>{
+					this.positions = result.data.positions;
+					this.pageNo = pageNo;
+					console.log(result.data.positions);
+					console.log("当前是第" +this.pageNo+ "页");
+				})
+			}
+		},
+		mounted:function(){
+			var _this = this;	//将指向vue对象的this赋值给外部方法定义的属性，然后在内部方法中使用该属性
+			$.post("../login/getnickname", {}, function(data) {
+				//用户昵称
+				console.log("当前登录的用户名为：" + data.nickName);
+				_this.nickname = data.nickName;
+				$("#em").text(data.nickName);
+				$("#n").css('display', 'flex');
+				$("#loginout").css('display', 'inline');
+				$("#login").css('display', 'none');
+				
+				axios.get("../favorites/findAll", {params:{nickname:_this.nickname}}).then(result =>{
+					_this.totalSize = Object.keys(result.data.positions).length;
+					_this.totalPage = Math.ceil(_this.totalSize / _this.pageSize);
+					console.log(result.data.positions);
+					console.log("找全部,共："+_this.totalSize +"条信息---总页数："+ _this.totalPage);
+				})
+				
+				axios.get("../favorites/findBypage", {params:{pageNo:_this.pageNo, pageSize:_this.pageSize,nickname:_this.nickname}}).then(result =>{
+					_this.positions = result.data.positions;
+					console.log("找分页,每页"+Object.keys(result.data.positions).length+"条信息--"+result.data.positions);
+					console.log("当前第" +_this.pageNo+ "页");
+				})
+				
+			}, "json");
+			
+		}
+	})
+
+//获取用户名
+function getnickname(){
+	$.post("../login/getnickname", {}, function(data) {
+		//用户昵称
+		console.log("当前登录的用户名为：" + data.nickName);
+		$("#em").text(data.nickName);
+		$("#n").css('display', 'flex');
+		$("#loginout").css('display', 'inline');
+		$("#login").css('display', 'none');
+	}, "json");
+}
+
+//下线
+function loginout(){
+	$.post("../login/loginout", {}, function(data) {
+		console.log("下线了...");
+	}, "text");
+	window.location.reload();
+}
+
+function joberCheck(){
+		//先发送请求获取登录用户id
+		$.get("../login/joberCheck", null, function(data){
+		if (data.code == 500) {
+			console.log("请先登录...");
+			alert("请先登录...");
+			$("#em").text("你好！请先登录...");
+			$("#n").css('display', 'flex');
+			location.href="../index_jober.html";
+			return;
+		}
+	
+		if (data.code == 200) {
+			//连上 websocket服务器
+			openWebSocket(data.msg);
+		}
+	},"json");
+}
+</script>
+</body>
+</html>

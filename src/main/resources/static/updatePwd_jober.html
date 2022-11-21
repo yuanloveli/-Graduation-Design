@@ -1,0 +1,190 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-修改密码</title>
+ <link rel="shortcut icon" href="images/copylogo.png">
+ <link rel="stylesheet" href="css/reset.css">
+ <link rel="stylesheet" href="css/main.css">
+ <link rel="stylesheet" href="css/reg.css">
+ <link rel="stylesheet" href="css/unlock.css">
+ <link rel="stylesheet" href="css/foot.css">
+ <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+ <script src="js/unlock.js"></script>
+</head>
+
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到兼职招聘系统</div>
+			<div class="fr">
+				<div id="n" class="login_info fl">
+					欢迎：
+					<p id="em" style="margin-right: 15px; color: blue">d q</p>
+				</div>
+				<div class="login_btn fl">
+					<a href="../login.html" id="login">登录</a> 
+					<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display: none" onclick="loginout()"> 
+					<span> | </span> 
+					<a href="../register_jober.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span> | </span> <a href="user_jober.html">用户中心</a> 
+					<span> | </span> <a href="resume.html">我的简历</a> 
+					<span> | </span> <a href="delivery.html">我的投递</a>
+				</div>
+			</div>
+		</div>
+	</div>
+
+
+	<!-- 注册布局 -->
+	<div class="register_con">
+		<div class="l_con fl">
+        	 <a href="#" class="reg_logo fr"><img src="images/logo.png"></a>
+        	 <div class="reg_slogan fr">平步青云 · 前程似锦</div>
+       		 <div class="reg_banner fr"></div>
+        </div>
+
+		<div class="r_con fr">
+        	<div class="reg_title clearfix">
+            	<h1 class="fl">修改密码</h1>
+            	<a href="login.html" class="fr">登录</a>
+            </div>
+        	<div class="reg_form clearfix">
+             	<form>
+                    <ul>
+                        <li>
+                            <label>用户名:</label>
+                            <p style="color: #47aa34;padding: 6px;margin-left: 74px;" id="nickname"></p>
+                        </li>
+                       <li>
+                            <label for="pwd">新密码:</label>
+                            <input type="password" id="pwd" name="pwd" placeholder="请输入6~15位字母、数字还可包含特殊字符">
+                            <span class="error_tip">提示信息</span>
+                        </li>
+                        <li>
+                            <label for="cpwd">确认密码:</label>
+                            <input type="password" id="cpwd" name="cpwd" placeholder="请输入确认密码">
+                            <span class="error_tip">提示信息</span>
+                        </li>
+                         <li>
+                            <input type="button" id="reg" name="reg" onClick="updataPwd()" value="确认">
+                            <span id="errmsg" class="error_tip">提示信息3</span>
+                        </li>
+                    </ul>
+                </form>
+        	</div>
+        </div>
+	</div>
+    
+    <!-- 版权所有 -->
+    <div class="footer">
+    	<div class="foot_link">
+        	<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我们</a> <span> | </span>
+            <a href="#">招聘广告</a> <span> | </span>
+            <a href="#">友情链接</a>
+        </div>
+    	<p>CopyRight &copy; 2022  All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    
+  
+    <script src="js/register.js"></script>
+        <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../js/slide.js"></script>
+	<script type="text/javascript" src="../js/qs.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/axios.js"></script>
+	<script type="text/javascript" src="../js/websocket.js"></script>			
+    
+    <script type="text/javascript">
+    
+    var nickname = "";
+    
+	$(function(){
+		//检查登录
+		joberCheck();
+	})
+
+       
+	function updataPwd() {
+		
+		console.log(nickname);
+		var pwd = $.trim($("#pwd").val());
+		var cpwd = $.trim($("#cpwd").val());
+		
+		
+		if(pwd == "" || cpwd != pwd) {
+			$("#reg").next().html("请完整正确的填写信息...");
+			$("#reg").next().show();
+			return;
+		}
+		
+		$.post("../jober/updatePwd", {nickName:nickname, pwd:pwd}, function(data){
+			console.log(data);
+			if(data.jober == 0) {
+				$("#reg").next().html("密码修改失败...");
+				$("#reg").next().show();
+			}else{
+				$("#reg").next().html("密码修改成功...");
+				$("#reg").next().show();
+				alert("密码修改成功");
+				//检查信息无误后，进行页面跳转
+				 window.location.href="../login.html";
+			}	
+		},"text")
+		
+		
+	}
+   
+    
+	//获取用户名
+	function getnickname(){
+		$.post("../login/getnickname", {}, function(data) {
+			//用户昵称
+			console.log("当前登录的用户名为：" + data.nickName);
+			nickname = data.nickName;
+			$("#em").text(data.nickName);
+			$("#nickname").text(data.nickName);
+			$("#n").css('display', 'flex');
+			$("#loginout").css('display', 'inline');
+			$("#login").css('display', 'none');
+		}, "json");
+	}
+	
+	//下线
+	function loginout(){
+		$.post("../login/loginout", {}, function(data) {
+			console.log("下线了...");
+		}, "text");
+		window.location.reload();
+	}
+	
+	function joberCheck(){
+			//先发送请求获取登录用户id
+			$.get("../login/joberCheck", null, function(data){
+			if (data.code == 500) {
+				alert("请先登录...");
+				console.log("请先登录...");
+				$("#em").text("你好！请先登录...");
+				$("#n").css('display', 'flex');
+				location.href="../login.html";
+				return;
+			}
+		
+			if (data.code == 200) {
+				//连上 websocket服务器
+				openWebSocket(data.msg);
+				getnickname();
+			}
+		},"json");
+	}
+	
+    </script>
+    
+</body>
+</html>

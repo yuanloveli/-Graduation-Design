@@ -1,0 +1,186 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>兼职招聘系统-用户信息</title>
+<link rel="shortcut icon" href="../../images/copylogo.png"
+	type="image/x-icon" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+	<div id="company_info">
+		<div id="table" class="mt10">
+			<div class="box span10 oh">
+					<table width="100%" border="0" cellpadding="0" cellspacing="0"class="list_table">
+						<thead>
+							<tr>
+								<th width="5%">编号</th>
+								<th width="5%">用户名</th>
+								<th width="10%">企业名</th>
+								<th width="5%">企业类型</th>
+								<th width="15%">企业简介</th>
+								<th width="10%">企业logo</th>
+								<th width="8%">联系电话</th>
+								<th width="8%">邮箱</th>
+								<th width="8%">状态</th>
+								<th width="15%">操作</th>
+							</tr>
+						</thead>
+
+						<tbody id="company_info" align="center">
+							<tr v-for="(c,index) in company">
+								<td><input type="text" disabled="true" :id=c.cno :value=c.cno></td>
+								<td><input type="text" disabled="true" :id=dq1(index) :value=c.nickname></td>
+								<td><input type="text" disabled="true" :id=dq2(index) :value=c.companyname></td>
+								<td><input type="text" disabled="true" :id=dq3(index) :value=c.companytype></td>
+								<td><input type="text" disabled="true" :id=dq4(index) :value=c.companydescr></td>
+								<td><img :src="'../../' +c.companypic" style="height: 60px;width: 60px;"></td>
+								<td><input type="text" disabled="true" :id=dq5(index) :value=c.tel></td>
+								<td><input type="text" disabled="true" :id=dq6(index) :value=c.email></td>
+								<td>{{c.status}}</td>
+								<td>
+									<button @click="updateCompany(dq1(index), dq2(index), dq3(index), dq4(index), dq5(index), dq6(index))">修改</button>&nbsp;&nbsp;
+									<button @click="saveCompany(c.cno, dq1(index), dq2(index), dq3(index), dq4(index), dq5(index), dq6(index))">保存</button>&nbsp;&nbsp;
+									<button v-if="c.status == 1" @click="deleteCompany(c.cno)">封禁</button>&nbsp;&nbsp;
+									<button v-if="c.status == 2" @click="reCompany(c.cno)">解封</button>&nbsp;&nbsp;
+								</td>
+							</tr>
+						</tbody>
+
+					</table>
+				<div class="page mt10">
+					<div class="pagination">
+						<ul id="pagination_info">
+							<li class="first-child active"><a href="javascript:void()"
+								onclick=" ">首页</a></li>
+							<li class="active"><a href="javascript:void()" onclick=" ">1</a></li>
+							<li class="last-child"><a href="javascript:void()"
+								onclick=" ">末页</a></li>
+						</ul>
+					</div>
+				</div>
+			</div>
+		</div>
+	</div>
+	<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+	<script type="text/javascript" src="../js/showpic.js"></script>
+	<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+	<script src="../../ckeditor/ckeditor.js"></script>
+	<script src="../js/jQuery.form.js"></script>
+	<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../../js/qs.js"></script>
+	<script type="text/javascript" src="../../js/vue.js"></script>
+	<script type="text/javascript" src="../../js/axios.js"></script>
+
+	<script type="text/javascript">
+var pageNo = 1;
+var pageSize = 10;
+var totalSize = 0;
+var totalPage = 0;
+
+$(function(){
+	  //调用查找函数
+	 // findByAll();
+});
+
+
+let app = new Vue({
+	el:"#company_info",
+	data:{
+		company:{},	
+	},
+	methods:{
+		updateCompany : function (nickname, companyname, companytype, companydescr, tel, email){
+
+			$("#"+nickname).attr('disabled',false);
+			$("#"+companyname).attr('disabled',false);
+			$("#"+companytype).attr('disabled',false);
+			$("#"+companydescr).attr('disabled',false);
+			$("#"+tel).attr('disabled',false);
+			$("#"+email).attr('disabled',false);
+			
+		},
+		saveCompany : function(cno, nickname, companyname, companytype, companydescr, tel, email){						
+ 			var cno1 = $.trim($("#"+cno).val());
+ 			var nickname1 = $.trim($("#"+nickname).val());
+ 			var companyname1 = $.trim($("#"+companyname).val());
+			var companytype1 = $.trim($("#"+companytype).val());
+			var companydescr1 = $.trim($("#"+companydescr).val());			
+			var tel1 = $.trim($("#" + tel).val());
+			var email1 = $.trim($("#" + email).val());
+
+			
+			console.log("获取到值"+cno1 + "--" + nickname1 + "--" + companyname1 + "--" + companytype1 + "--" + companydescr1 + "--" + tel1 + "--" + email1);
+			
+			axios.post("../../admin/updateCompany", qs.stringify({cno:cno1, nickname:nickname1, companyname:companyname1, companytype:companytype1, companydescr:companydescr1, tel:tel1, email:email1})).then(result =>{
+				if(result.data > 0){
+					alert("修改成功...");
+					window.location.reload();					
+				}else{
+					alert("求职者信息有重复，修改失败...");
+					window.location.reload();
+				}
+			}) 
+		},
+		deleteCompany : function(cno){
+			if (confirm("你确定要封禁这个企业吗？")) {
+			var jno = $.trim($("#"+cno).val());
+			axios.post("../../admin/deleteCompany", qs.stringify({cno:cno})).then(result =>{
+					if(result.data > 0){
+						alert("封禁成功...");
+						window.location.reload();
+					}else{
+						alert("企业封禁失败");
+					}
+				})
+				
+			}
+		},
+		reCompany : function(cno){
+			if (confirm("你确定要解封封禁这个企业吗？")) {
+			var jno = $.trim($("#"+cno).val());
+			axios.post("../../admin/reCompany", qs.stringify({cno:cno})).then(result =>{
+					if(result.data > 0){
+						alert("解封成功...");
+						window.location.reload();
+					}else{
+						alert("企业解封失败");
+					}
+				})
+				
+			}
+		},
+		dq1 : function(index){
+			return "a" + index;
+		},
+		dq2 : function(index){
+			return "b" + index;
+		},
+		dq3 : function(index){
+			return "c" + index;
+		},
+		dq4 : function(index){
+			return "d" + index;
+		},
+		dq5 : function(index){
+			return "e" + index;
+		},
+		dq6 : function(index){
+			return "f" + index;
+		}
+	},
+	mounted:function(){
+		axios.get("../../admin/findCompany", {params:{}}).then(result =>{
+			if(result.data.company == 0){
+				console.log("没有找到公司信息");
+			}else{
+				console.log(result.data.company);
+				this.company = result.data.company;
+			}					
+		})
+	}
+})
+</script>
+</body>
+</html>

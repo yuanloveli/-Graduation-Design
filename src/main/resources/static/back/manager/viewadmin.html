@@ -1,0 +1,117 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<title>源辰-管理员信息</title>
+<link rel="shortcut icon" href="../../images/copylogo.png" type="image/x-icon" />
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/main.css">
+</head>
+<body>
+	<div id="admin_info">
+		<div id="table" class="mt10">
+			<div class="box span10 oh">
+				<table width="100%" border="0" cellpadding="0" cellspacing="0"
+					id="admininfo" class="list_table">
+					<thead>
+						<tr>
+							<th width="20%">编号</th>
+							<th width="30%">姓名</th>
+							<th width="30%">联系方式</th>
+							<th>操作</th>
+						</tr>
+					</thead>
+					<tbody id="admin_info" align="center">
+						<tr v-for="a in admin">
+							<td><input type="text" disabled="true" :id=a.aid :value=a.aid></td>
+							<td><input type="text" disabled="true" :id=a.aname :value=a.aname></td>
+							<td><input type="text" disabled="true" :id=a.tel :value=a.tel></td>
+							<td>
+								<button @click="update(a.aid, a.aname, a.tel)">修改</button>&nbsp;&nbsp;
+								<button @click="save(a.aid, a.aname, a.tel)">保存</button>&nbsp;&nbsp;
+								<button @click="deleteadmin(a.aid)">删除</button>&nbsp;&nbsp;
+							</td>
+						</tr>
+					</tbody>
+				</table>
+			</div>
+		</div>
+	</div>
+
+<script type="text/javascript" src="../../js/jquery-3.4.1.min.js"></script>
+<script type="text/javascript" src="../../js/qs.js"></script>
+<script type="text/javascript" src="../../js/vue.js"></script>
+<script type="text/javascript" src="../../js/axios.js"></script>
+<script type="text/javascript">
+var pageNo = 1;
+var pageSize = 10;
+var totalSize = 0;
+var totalPage = 0;
+
+let app = new Vue({
+	el:"#admin_info",
+	data:{
+		admin:{},
+		aname:"",
+		pwd:"",
+		tel:""
+	},
+	methods:{
+		update : function (aid, aname, tel){
+			
+			$("#"+aname).attr('disabled',false);
+			$("#"+tel).attr('disabled',false);
+						
+		},
+		save : function(aid, aname, tel){
+			var aid = $.trim($("#"+aid).val());
+			var aname = $.trim($("#"+aname).val());
+			var tel = $.trim($("#"+tel).val());
+			
+			console.log(aid + "--" + aname + "--" + tel);
+			
+			axios.post("../../admin/update", qs.stringify({aid:aid, aname:aname, tel:tel})).then(result =>{
+				if(result.data > 0){
+					alert("修改成功...");
+					$("#"+aname).attr('disabled',true);
+					$("#"+tel).attr('disabled',true);
+					window.location.reload();					
+				}else{
+					$("#"+aname).attr('disabled',true);
+					$("#"+tel).attr('disabled',true);
+					alert("管理员信息有重复，修改失败...");
+					window.location.reload();
+				}
+			})
+		},
+		deleteadmin : function(aid){
+			if (confirm("你确定要删除吗？")) {
+			var aid = $.trim($("#"+aid).val());
+			axios.post("../../admin/delete", qs.stringify({aid:aid})).then(result =>{
+					if(result.data > 0){
+						alert("删除成功...");
+						window.location.reload();
+					}else{
+						alert("管理员信息删除失败");
+					}
+				})
+				
+			}
+		}
+	},
+	mounted:function(){
+		axios.get("../../admin/finds", {params:{}}).then(result =>{
+			if(result.data.admin == 0){
+				console.log("没有找到管理员信息");
+			}else{
+				console.log(result.data.admin);
+				this.admin = result.data.admin;
+			}					
+		})
+	}
+})
+
+
+</script>
+</body>
+</html>

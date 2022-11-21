@@ -1,0 +1,84 @@
+<!DOCTYPE html>
+<html>
+<head>
+<meta charset="UTF-8">
+<link rel="stylesheet" href="../css/common.css">
+<link rel="stylesheet" href="../css/main.css">
+<script type="text/javascript" src="../js/jquery-2.2.3.min.js"></script>
+<script type="text/javascript" src="../js/showpic.js"></script>
+<link rel="stylesheet" href="../css/layer-animate.css"/>
+<script type="text/javascript" src="../js/ajaxfileupload.js"></script>
+<script src="../js/jQuery.form.js"></script>
+<script src="../../ckeditor/ckeditor.js"></script>
+<script src="../js/method.js"></script>
+<style>
+.my{
+    margin:0;
+    padding: 0;
+}
+.mybtn{
+    float:left;
+    font-size: 18px;
+    margin:30px;
+    cursor: pointer;
+}
+</style>
+</head>
+<body>
+<div id="table" class="mt10">
+	<div class="box span10 oh">
+<!-- 			<div class="box_center">
+				<form action='../../files/addTypefileUpload' class='jqtransform' id='addGoodsType' method='post' enctype='multipart/form-data'>
+				职位类型名称：<input type="tname" id="wtname" class="input-text lh30" size="40"/>&nbsp;&nbsp;
+				职位类型图片：<input name='wfile' type="file" id="wpic" class="input-text lh30" size="40"/>&nbsp;&nbsp;
+				<input type="button" name="button" class="btn btn82 btn_save2" onclick="addNewsTypeInfo()" value="添加"/>&nbsp;&nbsp;
+				</form>
+			</div> -->
+		<table width="100%" border="0" cellpadding="0" cellspacing="0" class="list_table" id="goodstype">
+			<thead>
+				<tr>
+					<th width="10%">类型编号</th>
+                   	<th width="5%">类型图片</th>
+                   	<th width="30%">类型名称</th>
+                </tr>
+             </thead>
+             <tbody id="type_info" align="center">
+					<tr v-for="t in types">
+						<td>{{t.tno}}</td>
+						<td><img height='300' width='200' :src="'../../'+t.pic"></td>
+						<td>{{t.tname}}</td>
+					</tr>
+             </tbody> 
+		</table>
+	</div>
+</div>
+<script type="text/javascript" src="../../js/qs.js"></script>
+<script type="text/javascript" src="../../js/vue.js"></script>
+<script type="text/javascript" src="../../js/axios.js"></script>
+<script type="text/javascript">
+let app = new Vue({
+	el:"#type_info",
+	data:{
+		types:{},
+	},
+	methods:{
+
+	},
+	mounted:function(){
+		//调用初始化的查找函数,先查出总页数
+		axios.get("../../positions/index", {params:{}}).then(result =>{
+			if(result.data.types == undefined){
+				console.log("没有找到职位类型信息");
+			}else{
+				this.types = result.data.types;
+				console.log(result.data.types);
+			}
+			
+		})
+	}
+})
+
+
+</script>
+</body>
+</html>

@@ -1,0 +1,296 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-职位详情</title>
+<link rel="short icon" href="images/copylogo.png">
+<link rel="stylesheet" href="css/reset.css">
+<link rel="stylesheet" href="css/main.css">
+<link rel="stylesheet" href="css/details.css">
+
+</head>
+
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+	 	<div class="header">
+	 		<div class="welcome fl">欢迎来到兼职招聘系统</div>
+	 		<div class="fr">
+	         	<div id="n" class="login_info fl"> 欢迎：<p id="em"  style="margin-right: 15px; color:blue">y c</p>
+	             </div>
+	             <div class="login_btn fl" >
+	             	<a href="login.html" id="login">登录</a>
+	             	<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display:none" onclick="loginout()">
+	                 <span> | </span>
+	                 <a href="register_jober.html">注册</a>
+	             </div>
+	         	 <div class="user_link fl">
+	                 <span> | </span>
+	                 <a href="front/user_jober.html">用户中心</a>
+	                 <span> | </span>
+	                 <a href="front/resume.html">我的简历</a>
+	                 <span> | </span>
+	                 <a href="front/delivery.html">我的投递</a>
+	        		 </div> 
+	          </div>  
+	 	</div>
+	 </div>
+    
+   
+    <div class="navbar_con">
+    	<div class="navbar clearfix">
+        	<!-- 动态下拉框 -->
+    		<div class="subnav_con fl">
+            	<h1 class="fl">全职位信息</h1>
+            </div>
+    		<ul class="navlist fl">
+    			<li><a href="index_jober.html">首页</a></li>
+    		</ul>
+    	</div>
+    </div>
+     
+    <!-- 面包屑导航 --> 
+    <div class="breadcrumb" id="breadcrumb">
+     	<a href="positions.html">全部职位展示</a>
+        <span>&gt;</span>
+        <a href="javascript:void(0)">职位详情</a>
+     </div>
+     
+
+     
+    <div id="positions_info">
+    <!-- 职位展示 -->
+    
+    	<!-- 收藏 -->
+        <div class="guest_cart fr" style="position: absolute;left: 160px;top: 100px;">
+            <a href="front/favorites.html" class="cart_name fl">我的收藏</a>
+            <div class="goods_count fl" id="show_count">{{favorites}}</div>
+        </div>
+        
+    <div class="goods_details_con clearfix"  style="border: none">
+    	<div class="goods_details_list " style="margin: auto;">
+        	<h3>{{positions.pname}}</h3>
+        	<p>{{positions.companyname}} | {{positions.place}} | {{positions.tname}} | {{pdate}} </p>
+			<div class="r_wrap  clearfix">
+				<div class="tab_content" style="width: 730px;">
+					<dl>
+						<dt style="margin-top: 30px;">职位描述：</dt>
+						<dd>{{positions.intro}} </dd>
+						<dt style="margin-top: 30px;">职位要求：</dt>
+						<dd>{{positions.descr}}</dd>
+						
+					</dl>
+					<div class="total">薪资：<em>{{positions.price}}</em>/月</div>
+					<div class="operate_btn" style="margin-top:10px;">
+						<div style="margin: auto;width: 400px;">
+						<a @click="delivery" class="buy_btn" id="deliveryResume" style="cursor:pointer;">投递简历</a>
+						<a v-if="!isFavorites" @click="addFavorties" class="add_cart" id="collection" style="margin-left: 25px; cursor:pointer;">加入收藏</a>
+						<a v-if="isFavorites" @click="subFavorties" class="add_cart" id="collection1" style="margin-left: 25px; cursor:pointer;">取消收藏</a>
+						<div id="tishi"  style="margin-top: 15px;margin-left: 163px;color: red;"></div>
+						</div>							
+					</div>
+				</div>			
+			</div>
+		    <!-- 版权所有 -->
+		    <div class="footer">
+		    	<div class="foot_link">
+		        	<a href="#">关于我们</a> <span> | </span>
+		            <a href="#">联系我们</a> <span> | </span>
+		            <a href="#">招聘广告</a> <span> | </span>
+		            <a href="#">友情链接</a>
+		        </div>
+		    	<p>CopyRight &copy; 2022 All Rights Reserverd</p>
+		        <p>电话：18873434313 </p>
+		    </div>
+        </div>		
+    </div>   
+    </div>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/slide.js"></script>
+    <script type="text/javascript" src="js/qs.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/axios.js"></script> 
+    <script type="text/javascript" src="js/websocket.js"></script>
+    <script type="text/javascript"> 
+	$(function(){
+		//检查登录
+		joberCheck();
+	})
+
+		let positions_info = new Vue({
+			el:"#positions_info",
+			data:{
+				positions : [],
+				pno : 0,			//职位编号
+				pname : "",
+				pdate : "",
+				nickname : "",
+				companyname : "",
+				favorites : 0,
+				isFavorites : false,
+				ddate : ""
+			},
+			methods:{
+				addFavorties : function(){
+					if (this.nickname == "" || this.nickname == undefined) {
+						alert("请先登录...");				
+						return;
+					}else{
+						console.log("当前登录的用户名为：" + this.nickname);
+						console.log("当前登录的职位编号为：" + this.pno);
+						console.log("添加收藏...");
+						//查询收藏信息
+						axios.get("../favorites/addFavorties", {params:{nickname:this.nickname,pno:this.pno}}).then(result =>{
+							if(result.data.favorites == null){
+								console.log("添加收藏失败...");
+								$("#tishi").text("添加收藏失败...");
+							}else{
+								console.log("添加收藏成功...");
+								$("#tishi").text("添加收藏成功...");
+							}
+						})
+					}
+				},
+				subFavorties : function(){
+					if (this.nickname == "" || this.nickname == undefined) {
+						alert("请先登录...");				
+						return;
+					}else{
+						console.log("当前登录的用户名为：" + this.nickname);
+						console.log("当前职位的职位编号为：" + this.pno);
+						console.log("取消收藏...");
+						//取消收藏
+						axios.get("../favorites/subFavorties", {params:{nickname:this.nickname,pno:this.pno}}).then(result =>{
+							if(result.data.favorites == null){
+								console.log("取消收藏失败...");
+								$("#tishi").text("取消收藏失败...");
+							}else{
+								console.log("取消收藏成功...");
+								$("#tishi").text("取消收藏成功...");
+							}
+						})
+					}
+				},
+				delivery : function(){					
+					//需要求职者名称，企业名称，职位名称，职位编号，投递日期
+					if (this.nickname == "" || this.nickname == undefined) {
+						alert("请先登录...");				
+						return;
+					}else{
+						//获取此时的时间
+						var date = new Date();
+				        var year = date.getFullYear();
+				        var month = date.getMonth() + 1;
+				        var day = date.getDate();
+				        var hour = date.getHours();    // 获取当前小时数(0-23)
+				        var minutes = date.getMinutes();   // 获取当前分钟数(0-59)
+				        var seconds = date.getSeconds();   // 获取当前秒数(0-59)
+				        this.ddate = year + "-" + month + "-" + day + " " + hour + ":" + minutes + ":" + seconds;
+
+						//先判断是否有简历
+		 				axios.get("../resume/finds", {params:{nickname:this.nickname}}).then(result =>{
+							if(result.data.resume == 0){
+								console.log("你还没有简历...先创建一份吧");
+								$("#tishi").text("你还没有简历...先创建一份吧");
+							}else{							
+								console.log("当前登录的用户名为：" + this.nickname);
+								console.log("当前登录的职位名为：" + this.pname);
+								console.log("当前职位的职位编号为：" + this.pno);
+								console.log("当前职位的企业名称为：" + this.companyname);
+								console.log("当前时间为：" + this.ddate);
+								axios.get("delivery/add", {params:{ddate:this.ddate,pno:this.pno,nickname:this.nickname,companyname:this.companyname,pname:this.pname}}).then(result =>{
+
+									if(result.data.delivery == 0){
+										console.log("简历投递失败...");
+										$("#tishi").text("简历投递失败...");
+									}else{
+										console.log("简历投递成功...");
+										$("#tishi").text("简历投递成功！感谢你的应聘！");
+									}									
+								})
+							}				
+						})				
+					}
+				}
+			},
+			mounted:function(){
+				axios.post("login/getnickname", {params:{}}).then(result =>{
+					this.nickname = result.data.nickName;
+					
+					//查询收藏信息
+					axios.get("favorites/findAll", {params:{nickname:this.nickname}}).then(result =>{
+						this.favorites = Object.keys(result.data.positions).length;
+						for(var i in result.data.positions){
+							if(result.data.positions[i].pno == window.location.hash.split("#")[1]){
+								console.log("已经收藏了这个职位..."+result.data.positions[0].pno);
+								this.isFavorites = true;
+							}
+						}
+						console.log("共："+this.favorites +"条收藏信息");
+					})	
+				})				
+				
+				pno = window.location.hash.split("#")[1];
+				this.pno = pno;
+				console.log("当前页面职位id编号为："+pno);
+				
+				axios.get("positions/findDetails", {params:{pno:this.pno}}).then(result =>{
+					
+					var da = new Date(result.data.positions.pdate);
+				    var year = da.getFullYear()+'年';
+				    var month = da.getMonth()+1+'月';
+				    var day = da.getDate()+'日';
+				    date = year + month + day;
+			        	
+				    this.positions = result.data.positions;
+				    this.pname = result.data.positions.pname;
+				    this.companyname = result.data.positions.companyname;
+				    this.pdate = date;
+					console.log(result.data.positions);
+				})
+				
+			}
+		})		
+		
+		//获取用户名
+		function getnickname(name){
+			$.post("login/getnickname", {}, function(data) {
+				//用户昵称
+				console.log("当前登录的用户名为：" + data.nickName);
+				$("#em").text(data.nickName);
+				$("#n").css('display', 'flex');
+				$("#loginout").css('display', 'inline');
+				$("#login").css('display', 'none');
+			}, "json");
+		}
+		
+		//下线
+		function loginout(){
+			$.post("login/loginout", {}, function(data) {
+				console.log("下线了...");
+			}, "text");
+			window.location.reload();
+		}
+		
+		function joberCheck(){
+				//先发送请求获取登录用户id
+				$.get("login/joberCheck", null, function(data){
+				if (data.code == 500) {
+					console.log("请先登录...");
+					$("#em").text("你好！请先登录...");
+					$("#n").css('display', 'flex');			
+					return;
+				}
+			
+				if (data.code == 200) {
+					//连上 websocket服务器
+					openWebSocket(data.msg);
+					getnickname();
+				}
+			},"json");
+		}
+
+	</script>
+</body>
+</html>

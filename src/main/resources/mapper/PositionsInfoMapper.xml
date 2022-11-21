@@ -1,0 +1,49 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--注意:namespace中的值必须是对应接口的全路径， SQL语句中的id值必须是这个接口中对应方法名称 -->
+<mapper namespace="com.dq.springboot_recruit.mapper.IPositionsInfoMapper">
+	<!-- 显示首页职位信息，查找每种职位类型最新的4个职位信息 -->
+	<select id="finds" resultType="PositionsInfo">
+		select pno, pname, price, place, cf.companypic, tno from positionsinfo gf1, companyInfo cf where 4 >
+		(select count(pno) from positionsinfo gf2 where gf1.tno = gf2.tno and gf1.pno &lt; gf2.pno) and gf1.cno = cf.cno order by gf1.tno asc, gf1.pno desc 		
+	</select>
+	
+	<!-- 查询所有职位信息 -->
+	<select id="findAll" resultType="PositionsInfo">
+		select pno, pname, cf.companypic, price, place from positionsinfo pf, companyInfo cf where pf.cno = cf.cno
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="findBypage" resultType="PositionsInfo">
+		select pno, pname, cf.companypic, price, place from positionsinfo pf, companyInfo cf where pf.cno = cf.cno limit #{pageNo}, #{pageSize}
+	</select>
+	
+	<!-- 查询详细职位信息 -->
+	<select id="findDetails" parameterType="PositionsInfo" resultType="PositionsInfo">
+		select pno, cf.companyname, pt.tname, cf.companypic, pname, price, intro, place, descr, pdate from positionsinfo pf, companyInfo cf, positionType pt where pf.cno = cf.cno and pf.pno = #{pno} and pf.tno = pt.tno
+	</select>
+	
+	<!-- 分页通过关键词查询职位信息 -->
+	<select id="findBypageAndsearch" resultType="PositionsInfo">
+		select pno, pname, cf.companypic, price, place from positionsinfo pf, companyInfo cf where pf.cno = cf.cno and (pf.pname like CONCAT('%',#{search},'%') or cf.companyname like CONCAT('%',#{search},'%')) limit #{pageNo}, #{pageSize} 
+	</select>
+	
+	<!-- 通过关键词查询所有职位信息 -->
+	<select id="findAllsearch" resultType="PositionsInfo">
+		select pno, pname, cf.companypic, price, place from positionsinfo pf, companyInfo cf where pf.cno = cf.cno and (pf.pname like CONCAT('%',#{search},'%') or cf.companyname like CONCAT('%',#{search},'%'))
+	</select>
+	
+	<!-- 发布职位信息 -->
+	<insert id="add" parameterType="PositionsInfo">
+		insert into positionsInfo
+		(pno, cno, companyname, pname, tno, price, intro, place, descr, pdate)
+		values(0, #{cno}, #{companyname}, #{pname}, #{tno}, #{price}, #{intro}, #{place}, #{descr}, #{pdate})
+	</insert>
+	
+	<update id="updatePositions" parameterType="PositionsInfo">
+		update positionsInfo set pname = #{pname}, tno = #{tno}, price = #{price}, intro = #{intro}, place = #{place}, descr = #{descr} where pno = #{pno}
+	</update>
+</mapper>

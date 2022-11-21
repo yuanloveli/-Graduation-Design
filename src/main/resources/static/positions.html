@@ -1,0 +1,235 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-职位列表</title>
+ <link rel="shortcut icon" href="images/copylogo.png">
+ <link rel="stylesheet" href="css/reset.css">
+ <link rel="stylesheet" href="css/main.css">
+ <link rel="stylesheet" href="css/goods.css">
+</head>
+
+<body>
+	<!-- 头部  -->
+<div id="positions_info">
+	<div class="header_con">
+	 	<div class="header">
+	 		<div class="welcome fl">欢迎来到兼职招聘系统</div>
+	 		<div class="fr">
+	         	<div id="n" class="login_info fl"> 欢迎：<p id="em"  style="margin-right: 15px; color:blue">y c</p>
+	             </div>
+	             <div class="login_btn fl" >
+	             	<a href="login.html" id="login">登录</a>
+	             	<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display:none" onclick="loginout()">
+	                 <span> | </span>
+	                 <a href="register_jober.html">注册</a>
+	             </div>
+	         	 <div class="user_link fl">
+	                 <span> | </span>
+	                 <a href="front/user_jober.html">用户中心</a>
+	                 <span> | </span>
+	                 <a href="front/resume.html">我的简历</a>
+	                 <span> | </span>
+	                 <a href="front/delivery.html">我的投递</a>
+	        		 </div> 
+	          </div>  
+	 	</div>
+	 </div>
+    
+     <!-- 搜素框 -->
+     <div class="search_bar clearfix">
+        <a href="index_jober.html" class="logo fl"><img src="images/logo.png"></a>
+        <div class="search_con fl">
+            <input type="text" id="search" class="input_text fl" name="key_words" placeholder="输入职位名或企业名" autocomplete="off">
+            <input type="button" class="input_btn fr"  value="搜索" @click="searchp" >
+        </div>
+        <div class="guest_cart fr">
+            <a href="front/favorites.html" class="cart_name fl">我的收藏</a>
+            <div class="goods_count fl" id="show_count">{{favorites}}</div>
+        </div>
+        <div id="dq" style="margin-top: 89px;margin-left: 300px;color: red;"></div>
+     </div>
+     
+    <!-- 全部商品分类 --> 
+    <div class="navbar_con">
+    	<div class="navbar clearfix">
+    		<div class="subnav_con fl">
+            	<h1 class="fl">全职位信息</h1>
+            </div>
+    		<ul class="navlist fl">
+    			<li><a href="index_jober.html">首页</a></li>
+    		</ul>
+    	</div>
+    </div>
+     
+    <!-- 面包屑导航 --> 
+    <div class="breadcrumb" id="breadcrumb">
+     	<a>全部职位展示：</a>
+     </div>
+     
+     <!-- 职位信息展示区域-->
+     <div class="main_wrap clearfix">
+
+        <!-- 热门类型查询 -->
+        <div class="r_wrap fr clearfix">
+        	<div class="sort_bar">
+            	<a href="javascript:void(0);" id="normal" class="type active">根据企业名</a>
+            </div>
+            <div id="dqr" style="color: red;"></div>
+        	<ul class="goods_type_list clearfix show1">
+          		<li v-for="pd in positions">
+                    <a :href="'details.html#' + pd.pno" target="_blank"><img :src="pd.companypic"></a>
+                    <h4><a :href="'details.html#' + pd.pno" target="_blank">{{pd.pname}}</a></h4>
+                    <div class="operate">
+                    	<span class="prize">月薪：{{pd.price}}</span>
+                        <span class="unit">{{pd.place}}</span>
+                    </div>
+                </li>               
+            </ul>
+            
+			     <!-- 分页栏-->
+			<div class="pagenation">
+				<ul>
+					<li><a @click="findBypage(1,pageSize)">首页</a></li>
+					<li v-for="tp in totalPage"><a @click="findBypage(tp,pageSize)" :class={"active":tp==pageNo}>{{tp}}</a></li>
+					<li><a @click="findBypage(totalPage,pageSize)">尾页</a></li>
+				</ul>
+			</div>
+        </div>
+   	   </div>
+</div>
+    <!-- 版权所有 -->
+    <div class="footer">
+    	<div class="foot_link">
+        	<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我们</a> <span> | </span>
+            <a href="#">招聘广告</a> <span> | </span>
+            <a href="#">友情链接</a>
+        </div>
+    	<p>CopyRight &copy; 2022  All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    <script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
+    <script type="text/javascript" src="js/jquery-ui.min.js"></script>
+    <script type="text/javascript" src="js/slide.js"></script>
+    <script type="text/javascript" src="js/qs.js"></script>
+    <script type="text/javascript" src="js/vue.js"></script>
+    <script type="text/javascript" src="js/axios.js"></script> 
+    <script type="text/javascript" src="js/websocket.js"></script>
+    <script type="text/javascript">   
+	var pageNo = 1;
+	var pageSize = 5;
+	var totalSize = 0;
+	var totalPage = 0;
+    
+	$(function(){
+		//检查登录
+		joberCheck();
+	})
+
+		let positions_info = new Vue({
+			el:"#positions_info",
+			data:{
+				positions:{},
+			    pageNo : 1,		//当前页数
+			    pageSize : 10,	//每页显示几条
+			    totalSize : 0,	//总共多少条数据
+			    totalPage : 0,	//总页数
+			    favorites:0,	//收藏数
+			    nickname:""
+			},
+			methods:{
+				findBypage : function(pageNo, pageSize){
+					axios.get("positions/findBypage", {params:{pageNo:pageNo, pageSize:pageSize}}).then(result =>{
+						this.positions = result.data.positions;
+						this.pageNo = pageNo;
+						console.log(result.data.positions);
+						console.log("当前是第" +this.pageNo+ "页");
+					})
+				},
+				searchp : function(){
+					var pname = $.trim($("#search").val());
+					if(pname == ""){
+						console.log("请输入关键词...");
+						$("#dq").text("请输入关键词...");
+						return;
+					}else{
+						$("#dq").text("");
+						console.log("查找:"+pname);
+						location.href="positions_search.html#"+pname;
+					}
+				}
+			},
+			mounted:function(){
+				
+				axios.post("login/getnickname", {params:{}}).then(result =>{
+					this.nickname = result.data.nickName;
+					
+					//查询收藏信息
+					axios.get("favorites/findAll", {params:{nickname:this.nickname}}).then(result =>{
+						this.favorites = Object.keys(result.data.positions).length;
+						console.log("共："+this.favorites +"条收藏信息");
+					})	
+				})				
+				
+				axios.get("positions/findAll", {params:{}}).then(result =>{
+					if(result.data.positions == 0){
+						console.log("暂时没有职位信息...");
+						$("#dqr").text("没有搜索到职位信息...");
+					}else{
+						this.totalSize = Object.keys(result.data.positions).length;
+						this.totalPage = Math.ceil(this.totalSize / this.pageSize);
+						console.log(result.data.positions);
+						console.log("找全部,共："+this.totalSize +"条信息---总页数："+ this.totalPage);
+					}
+				})
+					
+				axios.get("positions/findBypage", {params:{pageNo:this.pageNo, pageSize:this.pageSize}}).then(result =>{
+					this.positions = result.data.positions;
+					console.log("找分页,每页"+Object.keys(result.data.positions).length+"条信息--"+result.data.positions);
+					console.log("当前第" +this.pageNo+ "页");
+				})
+			}
+		})
+	
+	//获取用户名
+	function getnickname(){
+		$.post("login/getnickname", {}, function(data) {
+			//用户昵称
+			console.log("当前登录的用户名为：" + data.nickName);
+			$("#em").text(data.nickName);
+			$("#n").css('display', 'flex');
+			$("#loginout").css('display', 'inline');
+			$("#login").css('display', 'none');
+		}, "json");
+	}
+	
+	//下线
+	function loginout(){
+		$.post("login/loginout", {}, function(data) {
+			console.log("下线了...");
+		}, "text");
+		window.location.reload();
+	}
+	
+	function joberCheck(){
+			//先发送请求获取登录用户id
+			$.get("login/joberCheck", null, function(data){
+			if (data.code == 500) {
+				console.log("请先登录...");
+				$("#em").text("你好！请先登录...");
+				$("#n").css('display', 'flex');
+				
+				return;
+			}
+		
+			if (data.code == 200) {
+				//连上 websocket服务器
+				openWebSocket(data.msg);
+				getnickname();
+			}
+		},"json");
+	}
+	</script>
+</body>
+</html>

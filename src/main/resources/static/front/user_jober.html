@@ -1,0 +1,169 @@
+<!doctype html>
+<html>
+<head>
+<meta charset="utf-8">
+<title>兼职招聘系统-用户中心</title>
+ <link rel="shortcut icon" href="../images/copylogo.png">
+ <link rel="stylesheet" href="../css/reset.css">
+ <link rel="stylesheet" href="../css/main.css">
+ <link rel="stylesheet" href="../css/user.css">
+</head>
+
+<body>
+	<!-- 头部  -->
+	<div class="header_con">
+		<div class="header">
+			<div class="welcome fl">欢迎来到兼职招聘系统</div>
+			<div class="fr">
+				<div id="n" class="login_info fl">
+					欢迎：
+					<p id="em" style="margin-right: 15px; color: blue">d  q</p>
+				</div>
+				<div class="login_btn fl">
+					<a href="../login.html" id="login">登录</a> 
+					<input type="button" class="dqbtn" id="loginout" value="退出登录" style="display: none" onclick="loginout()"> 
+					<span> | </span> 
+					<a href="../register_jober.html">注册</a>
+				</div>
+				<div class="user_link fl">
+					<span> | </span> <a href="user_jober.html">用户中心</a> 
+					<span> | </span> <a href="resume.html">我的简历</a> 
+					<span> | </span> <a href="delivery.html">我的投递</a>
+				</div>
+			</div>
+		</div>
+	</div>
+    
+     <!-- 搜素框 -->
+     <div class="search_bar clearfix">
+        <a href="../index_jober.html" class="logo fl"><img src="../images/logo.png"></a>
+        <div class="guest_cart fr">
+            <a href="resume.html" class="cart_name fl">我的简历</a>
+            <div class="goods_count fl" id="show_count">1</div>
+        </div>
+     </div
+     
+    ><!-- 用户中心界面 -->
+    <div class="main_con clearfix">
+    
+    	<!-- 左侧用户菜单栏 -->
+		<div class="left_menu_con fl clearfix">
+			<h3>用户中心</h3>
+			<ul>
+				<li><a href="user_jober.html" class="active">· 个人信息</a></li>
+				<li><a href="resume.html" >· 我的简历</a></li>
+				<li><a href="delivery.html" >· 我的投递</a></li>
+				<li><a href="../updatePwd_jober.html" >· 修改密码</a></li>
+			</ul>
+		</div>
+        
+        <!-- 右侧信息展示 -->
+        <div class="right_content fr clearfix" id="jober_info">
+			<!-- 基本信息  -->
+            <div class="info_con clearfix">
+                <h3 class="common_title2">基本信息</h3>
+                <ul class="user_info_list">
+                	<li>账号类型：<span><img style="height: 60px;" src="../images/head.png" /></span></li>
+                    <li>用户昵称：<span>{{jober.nickName}}</span> </li>
+                    <li>联系方式：<span>{{jober.tel}}</span></li>
+                    <li>电子邮箱：<span>{{jober.email}}</span></li>
+                    <li>账号状态：<span>正常</span></li>
+                </ul>
+            </div>
+        </div>
+
+    </div>
+    
+    <!-- 版权所有 -->
+	<div class="footer">
+    	<div class="foot_link">
+    		<a href="#">关于我们</a> <span> | </span>
+            <a href="#">联系我么</a> <span> | </span>
+            <a href="#">招聘人才</a> <span> | </span>
+            <a href="#">友情链接</a> 
+    	</div>
+    	<p>CopyRight &copy; 2022  All Rights Reserverd</p>
+        <p>电话：1787-3443012 </p>
+    </div>
+    <script type="text/javascript" src="../js/jquery-3.4.1.min.js"></script>
+	<script type="text/javascript" src="../js/jquery-ui.min.js"></script>
+	<script type="text/javascript" src="../js/slide.js"></script>
+	<script type="text/javascript" src="../js/qs.js"></script>
+	<script type="text/javascript" src="../js/vue.js"></script>
+	<script type="text/javascript" src="../js/axios.js"></script>
+	<script type="text/javascript" src="../js/websocket.js"></script>
+    <script type="text/javascript">
+	$(function(){
+		//检查登录
+		joberCheck();
+		
+	})
+	
+		let jober_info = new Vue({
+			el:"#jober_info",
+			data:{
+				jober:[],
+				nickname:"",
+			},
+			methods:{
+
+			},
+			mounted:function(){
+				axios.post("../login/getnickname", {params:{}}).then(result =>{
+					this.nickname = result.data.nickName;
+					
+	 				axios.get("../jober/finds", {params:{nickName:this.nickname}}).then(result =>{
+						console.log(result.data.jober);
+						if(result.data.jober == 0){
+							console.log("求职者信息查询失败...");
+						}else{
+							this.jober = result.data.jober;
+						}
+					})
+				})				
+			}
+		})
+    
+	//获取用户名
+	function getnickname(){
+		$.post("../login/getnickname", {}, function(data) {
+			//用户昵称
+			console.log("当前登录的用户名为：" + data.nickName);
+			$("#em").text(data.nickName);
+			$("#n").css('display', 'flex');
+			$("#loginout").css('display', 'inline');
+			$("#login").css('display', 'none');
+		}, "json");
+	}
+	
+	//下线
+	function loginout(){
+		$.post("../login/loginout", {}, function(data) {
+			console.log("下线了...");
+		}, "text");
+		window.location.reload();
+	}
+	
+	function joberCheck(){
+			//先发送请求获取登录用户id
+			$.get("../login/joberCheck", null, function(data){
+			if (data.code == 500) {
+				alert("请先登录...");
+				console.log("请先登录...");
+				$("#em").text("你好！请先登录...");
+				$("#n").css('display', 'flex');
+				location.href="../index_jober.html";
+				return;
+			}
+		
+			if (data.code == 200) {
+				//连上 websocket服务器
+				openWebSocket(data.msg);
+				getnickname();
+			}
+		},"json");
+	}
+    
+    </script>
+</body>
+</html>

@@ -1,0 +1,31 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--注意:namespace中的值必须是对应接口的全路径， SQL语句中的id值必须是这个接口中对应方法名称 -->
+<mapper namespace="com.dq.springboot_recruit.mapper.IFavoritesMapper">	
+	<!-- 查询所有收藏职位信息 -->
+	<select id="findAll" resultType="PositionsInfo">
+		select f.pno, pname, cf.companypic, price, place from positionsinfo pf, companyInfo cf , favorites f where pf.cno = cf.cno and pf.pno = f.pno and f.nickname = #{nickname}; 
+	</select>
+	
+	<!-- 分页查询 -->
+	<select id="findBypage" resultType="PositionsInfo">
+		select f.pno, pname, cf.companypic, price, place from positionsinfo pf, companyInfo cf , favorites f where pf.cno = cf.cno and pf.pno = f.pno and f.nickname = #{nickname} limit #{pageNo}, #{pageSize}
+	</select>
+	
+	<!-- 查询收藏职位详细信息 -->
+	<select id="findDetails" parameterType="PositionsInfo" resultType="PositionsInfo">
+		select pno, cf.companyname, pt.tname, cf.companypic, pname, price, intro, place, descr, pdate from positionsinfo pf, companyInfo cf, positionType pt where pf.cno = cf.cno and pf.pno = #{pno} and pf.tno = pt.tno
+	</select>
+	
+	<!-- 添加收藏 -->
+	<insert id="addFavorties" parameterType="Favorites">
+		insert into favorites values(0, #{nickname}, #{pno})
+	</insert>
+	
+	<delete id="subFavorties" parameterType="Favorites">
+		delete from favorites where pno=#{pno};
+	</delete>
+</mapper>

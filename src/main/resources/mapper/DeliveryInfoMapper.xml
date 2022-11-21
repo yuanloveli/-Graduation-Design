@@ -1,0 +1,42 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<!DOCTYPE mapper
+ 	PUBLIC "-//mybatis.org//DTD Mapper 3.0//EN"
+	"http://mybatis.org/dtd/mybatis-3-mapper.dtd">
+
+<!--注意:namespace中的值必须是对应接口的全路径， SQL语句中的id值必须是这个接口中对应方法名称 -->
+<mapper namespace="com.dq.springboot_recruit.mapper.IDeliveryInfoMapper">	
+	<!-- 投递简历 -->	
+	<insert id="add" parameterType="DeliveryInfo">
+		insert into DeliveryInfo values(0, #{ddate}, #{pno}, #{nickname}, #{companyname}, #{pname}, 1)
+	</insert>
+
+	<!-- 查找简历编号 -->
+	<select id="findr" resultType="ResumeInfo" parameterType="ResumeInfo">
+		select rno from resumeinfo where nickname = #{nickname}
+	</select>
+	
+	<!-- 查找公司名称 -->
+	<select id="findc" resultType="CompanyInfo" parameterType="CompanyInfo">
+		select companyname from positionsinfo where pno = #{pno}
+	</select>
+
+	<!-- 查找投递记录信息 -->
+	<select id="findd" resultType="DeliveryInfo" parameterType="DeliveryInfo">
+		select dno, ddate, companyname, pname, status from deliveryinfo where nickname = #{nickname};
+	</select>
+	
+	<!-- 查找收到的简历 -->
+	<select id="findReceived" resultType="DeliveryInfo" parameterType="DeliveryInfo">
+		select dno, ddate, nickname, companyname, pname, status from deliveryinfo where companyname = #{companyname};
+	</select>
+	
+	<!-- 批准简历 -->	
+	<update id="approved" parameterType="DeliveryInfo">
+		update DeliveryInfo set status = 2 where nickname = #{nickname} and dno = #{dno}
+	</update>
+	
+	<!-- 拒绝简历 -->	
+	<update id="refuse" parameterType="DeliveryInfo">
+		update DeliveryInfo set status = 3 where nickname = #{nickname} and dno = #{dno}
+	</update>
+</mapper>
