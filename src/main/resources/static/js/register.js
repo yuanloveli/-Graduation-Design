@@ -20,7 +20,7 @@ $("#nickname").blur (function(){
 	}
 	//正则表达式
 	//创建一个规则
-	var reg = /^\w{6,15}$/;
+	var reg = /^\w{3,15}$/;
 	//判断
 	/*
 	var flag = reg.test(nickname);
@@ -28,7 +28,7 @@ $("#nickname").blur (function(){
 	*/
 	if( !reg.test(nickname)){
 		//给当前对象的下一个标签设值
-		$(this).next().html("用户名必须是6-15位的英文或数字");
+		$(this).next().html("用户名必须是3-15位的英文或数字");
 		//未设值前该标签是隐藏的  此时就必须显示来
 		$(this).next().show();
 	}
@@ -56,7 +56,7 @@ function check_pwd(){
 	//获取密码
 	var pwd = $("#pwd").val();
 	//规则
-	var reg = /^[\w@!#$%^&*~]{6,15}$/;
+	var reg = /^[\w@!#$%^&*~]{3,15}$/;
 	//判断
 	if(!reg.test(pwd)){
 		$("#pwd").next().html("密码不符合规范");

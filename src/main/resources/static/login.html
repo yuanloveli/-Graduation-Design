@@ -133,7 +133,7 @@
 						Vue.set(vue.status, 2, false);
 						axios.post("login/joberLogin", qs.stringify({nickName:this.nickname, pwd:this.pwd})).then(result =>{
 							if (result.data.code == 200) {
-								var time = 3;
+								var time = 1;
 								var timeTask = setInterval(function(data) {									
 									if(time > 0) {
 										time --;

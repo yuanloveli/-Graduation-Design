@@ -2,7 +2,7 @@
 <html>
 <head>
 <meta charset="utf-8">
-<title>兼职招聘系统-职位详情</title>
+<title>在校大学生兼职招聘系统-职位详情</title>
 <link rel="short icon" href="images/copylogo.png">
 <link rel="stylesheet" href="css/reset.css">
 <link rel="stylesheet" href="css/main.css">
@@ -134,7 +134,8 @@
 			methods:{
 				addFavorties : function(){
 					if (this.nickname == "" || this.nickname == undefined) {
-						alert("请先登录...");				
+						window.location.href = "login.html";
+						alert("请先登录...");
 						return;
 					}else{
 						console.log("当前登录的用户名为：" + this.nickname);
@@ -154,7 +155,8 @@
 				},
 				subFavorties : function(){
 					if (this.nickname == "" || this.nickname == undefined) {
-						alert("请先登录...");				
+						window.location.href = "login.html";
+						alert("请先登录...");
 						return;
 					}else{
 						console.log("当前登录的用户名为：" + this.nickname);
@@ -175,6 +177,7 @@
 				delivery : function(){					
 					//需要求职者名称，企业名称，职位名称，职位编号，投递日期
 					if (this.nickname == "" || this.nickname == undefined) {
+						window.location.href = "login.html";
 						alert("请先登录...");				
 						return;
 					}else{

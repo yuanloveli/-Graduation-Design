@@ -54,7 +54,7 @@ public class SendMailUtil {
 				+ "<p style='text-indent:2em; font-size: 20px;'>欢迎使用兼职招聘系统,您本次的注册码是"
 				+ "<span style='font-size:30px;font-weight:bold;color:red'>"+code+"</span>, 3分钟内有效，请尽快使用！</p>"
 				+ "<p style='text-align:right; padding-right: 20px;'"
-				+ "<a href='http://www.QQ.html' style='font-size: 18px'>17级软件2班Dq的兼职招聘系统</a></p>"
+				+ "<a href='http://www.QQ.html' style='font-size: 18px'>在校大学生兼职招聘系统</a></p>"
 				+ "<span style='font-size: 18px; float;right; margin-right: 60px;'>" +sdf.format(new Date())+"</span></body></html>";
 				
 				//设置邮件正文
