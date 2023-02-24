@@ -1,8 +1,10 @@
 package com.dq.springboot_recruit;
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年4月8日 上午09:51:43
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 21:17
+ */
+
 import org.mybatis.spring.annotation.MapperScan;
 import org.springframework.boot.SpringApplication;
 import org.springframework.boot.autoconfigure.SpringBootApplication;

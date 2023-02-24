@@ -19,9 +19,11 @@ import com.dq.springboot_recruit.websocket.WebServerSocket;
 
 
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月9日 下午4:08:21
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:12
+ */
+
 @Controller
 @RequestMapping("/login")
 public class LoginController {
@@ -39,7 +41,7 @@ public class LoginController {
 		System.out.println("登录查询的结果：" + jober);
 		if (jober == null) {
 			//账号或密码错误
-			System.out.println("求职者账号或密码错误...");
+			System.out.println("求职者账号或密码错误！");
 			return ResponseUtil.responseMap(500, null, null);
 		}
 		
@@ -51,7 +53,7 @@ public class LoginController {
 			wss.sendMessage("100");
 		}
 		
-		System.out.println("求职者登录成功...");
+		System.out.println("求职者登录成功");
 		return ResponseUtil.responseMap(200, null, null);
 	}
 	

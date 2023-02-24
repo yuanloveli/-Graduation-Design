@@ -34,5 +34,6 @@ mybatis:
   
 logging:
    level:
-      com.dq.springboot_recruit.mapper: trace
-  
+      com.dq.springboot_recruit.mapper: debug
+   file:
+     path: D:\Java\springboot_recruit-master\log

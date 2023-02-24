@@ -15,9 +15,11 @@ import com.dq.springboot_recruit.entity.PositionsInfo;
 import com.dq.springboot_recruit.service.IFavoritesService;
 
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月13日 下午9:59:48
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:21
+ */
+
 @RestController
 @RequestMapping("/favorites")
 public class FavoritesController {

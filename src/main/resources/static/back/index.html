@@ -24,11 +24,11 @@
 					</div>
 					<div>
 						<input type="text" class="username" v-model="aname" autofocus="autofocus" @blur="checkInfo(0)" placeholder="请输入账号..."></br>
-						<span v-if="status[0]" style="color:red;">账号格式不正确...</span>
+						<span v-if="status[0]" style="color:red;">账号格式不正确</span>
 					</div>
 					<div>
 						<input type="password" class="pwd" v-model="pwd" @blur="checkInfo(1)" placeholder="请输入密码..."></br>
-						<span v-if="status[1]" style="color:red;">密码格式不正确...</span>
+						<span v-if="status[1]" style="color:red;">密码格式不正确</span>
 					</div>
 					<div id="btn_area">
 						<input type="button" id="sub_btn" @click="login" value="登录">
@@ -40,7 +40,7 @@
 </div>
 	<div id="login_bottom">
 		<label style="color: #FFF"><a class="copy"
-			href="">衡阳市南华大学船山学院17级软件2班邓强 </a>&copy; 版权所有</label>
+			href="">沙市湖南警察学院19级计科02区队袁利 </a>&copy; 版权所有</label>
 	</div>
 </body>
 
@@ -88,7 +88,7 @@
 				if (result.data.code == 200) {
 					location.href="manager/index.html";
 				} else if (result.data.code == 500) {
-					alert("账号或密码错误，请确认后重新输入...")
+					alert("账号或密码错误，请确认后重新输入")
 				}
 			})
 		}

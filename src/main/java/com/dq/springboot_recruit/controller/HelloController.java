@@ -4,10 +4,11 @@ import org.springframework.stereotype.Controller;
 import org.springframework.web.bind.annotation.RequestMapping;
 
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月10日 上午9:49:27
-* 设置项目欢迎页面
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:21
+ */
+
 @Controller
 public class HelloController {
     @RequestMapping("/")

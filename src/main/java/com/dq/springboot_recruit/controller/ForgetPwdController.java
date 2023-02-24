@@ -11,9 +11,11 @@ import com.dq.springboot_recruit.entity.JoberInfo;
 import com.dq.springboot_recruit.service.IForgetPwdService;
 
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月16日 上午10:45:03
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:21
+ */
+
 @Controller
 @RequestMapping("/forgetPwd")
 public class ForgetPwdController {

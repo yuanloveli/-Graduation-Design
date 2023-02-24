@@ -12,9 +12,11 @@ import com.dq.springboot_recruit.service.IJoberInfoService;
 
 
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月13日 下午12:54:02
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:21
+ */
+
 
 @RestController
 @RequestMapping("/jober")
@@ -35,10 +37,10 @@ public class JoberInfoController {
 	public int updatePwd(JoberInfo joberInfo){
 		System.out.println("修改密码查询的求职者信息："+ joberInfo);
 		if(joberInfoService.updatePwd(joberInfo) > 0) {
-			System.out.println("密码修改成功...");
+			System.out.println("密码修改成功");
 			return 1;
 		}else {
-			System.out.println("密码修改失败...");
+			System.out.println("密码修改失败!");
 			return 0;
 		}	
 	}

@@ -70,7 +70,7 @@ public class PositionsInfoServiceImpl implements IPositionsInfoService{
 	@Override
 	public Map<String, Object> findBypageAndsearch(int pageNo, int pageSize, String search) {
 		Map<String, Object> map = new HashMap<String, Object>();
-
+//		positionsInfoMapper.selectPage();
 		map.put("positions", positionsInfoMapper.findBypageAndsearch(pageNo, pageSize, search));
 		return map;
 	}

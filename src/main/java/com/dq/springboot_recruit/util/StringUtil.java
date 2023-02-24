@@ -1,9 +1,11 @@
 package com.dq.springboot_recruit.util;
 
 /**
-* @author 作者:dq
-* @version 创建时间：2021年5月8日 上午11:11:03
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:16
+ */
+
 
 public class StringUtil {
 	

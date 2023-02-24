@@ -11,9 +11,11 @@ import javax.websocket.server.PathParam;
 import javax.websocket.server.ServerEndpoint;
 import org.springframework.stereotype.Component;
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月9日 下午4:08:21
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 16:39
+ */
+
 @Component
 @ServerEndpoint("/websocket/{id}")
 public class WebServerSocket {

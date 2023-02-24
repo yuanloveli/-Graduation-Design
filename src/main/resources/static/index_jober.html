@@ -15,7 +15,7 @@
 	 	<div class="header">
 	 		<div class="welcome fl">欢迎使用兼职招聘系统</div>
 	 		<div class="fr">
-	         	<div id="n" class="login_info fl"> 欢迎：<p id="em"  style="margin-right: 15px; color:blue">d q</p>
+	         	<div id="n" class="login_info fl"> <p id="em"  style="margin-right: 15px; color:blue">yuan li</p>
 	             </div>
 	             <div class="login_btn fl" >
 	             	<a href="login.html" id="login">登录</a>
@@ -30,12 +30,12 @@
 	                 <a href="front/resume.html">我的简历</a>
 	                 <span> | </span>
 	                 <a href="front/delivery.html">我的投递</a>
-	        		 </div> 
-	          </div>  
+	        		 </div>
+	          </div>
 	 	</div>
 	 </div>
 
-    
+
      <!-- 搜素框 -->
      <div class="search_bar clearfix">
      		<a href="login.html" target="_blank"  class="logo fl"><img src="images/logo.png"></a>
@@ -65,7 +65,7 @@
     		</ul>
     	</div>
     </div>
-    
+
     <!-- 导航栏 -->
     <div class="center_con clearfix">
         <div class="subnav fl">
@@ -75,7 +75,7 @@
                 <li><a href="#model03" class="meet">设计</a></li>
                 <li><a href="#model04" class="ice">人事</a></li>
                 <li><a href="#model" class="egg">校园兼职</a></li>
-                <li><a href="#model" class="vegetables">市场</a></li>           
+                <li><a href="#model" class="vegetables">市场</a></li>
             </ul>
         </div>
         <div class="slide fl">
@@ -105,7 +105,7 @@
             </div>
             <a href="positions.html" target="_blank" class="goods_more fr" id="fruit_more">查看更多</a>
         </div>
-    
+
     	<div class="goods_con clearfix">
         	<div class="goods_banner fl"><img :src="type.pic"></div>
         	<ul class="goods_list fl" id="fruit_list">
@@ -117,35 +117,35 @@
         	</ul>
         </div>
     </div>
-</div>	
- 
+</div>
+
     <!-- 版权所有 -->
-    <div class="footer">
-    	<div class="foot_link">
-        	<a href="#">关于我们</a> <span> | </span>
-            <a href="#">联系我们</a> <span> | </span>
-            <a href="#">招聘广告</a> <span> | </span>
-            <a href="#">友情链接</a>
-        </div>
-    	<p>CopyRight &copy; 2022  All Rights Reserverd</p>
-        <p>电话：1787-3443012 </p>
+<div class="footer">
+    <div class="foot_link">
+        <a href="#">关于我们</a> <span> | </span>
+        <a href="#">联系我们</a> <span> | </span>
+        <a href="#">招聘广告</a> <span> | </span>
+        <a href="#">友情链接</a>
     </div>
-    
+    <p>CopyRight &copy; 2023  All Rights Reserverd</p>
+    <p>电话：188-7343-4313 </p>
+</div>
+
     <!--  注意引入顺序 -->
 	<script type="text/javascript" src="js/jquery-3.4.1.min.js"></script>
     <script type="text/javascript" src="js/jquery-ui.min.js"></script>
     <script type="text/javascript" src="js/slide.js"></script>
     <script type="text/javascript" src="js/qs.js"></script>
     <script type="text/javascript" src="js/vue.js"></script>
-    <script type="text/javascript" src="js/axios.js"></script> 
+    <script type="text/javascript" src="js/axios.js"></script>
     <script src="js/websocket.js"></script>
-    
+
     <script type="text/javascript">
 		$(function(){
 			//检查登录
 			joberCheck();
 		})
-		
+
 		let positions_info = new Vue({
 			el:"#positions_info",
 			data:{
@@ -172,14 +172,14 @@
 
 				axios.post("login/getnickname", {params:{}}).then(result =>{
 					this.nickname = result.data.nickName;
-					
+
 					//查询收藏信息
 					axios.get("favorites/findAll", {params:{nickname:this.nickname}}).then(result =>{
 						this.favorites = Object.keys(result.data.positions).length;
 						console.log("共："+this.favorites +"条收藏信息");
-					})	
+					})
 				})
-								
+
 				//查询首页信息
 				axios.get("positions/index", {params:{}}).then(result =>{
 					this.types=result.data.types;
@@ -188,7 +188,7 @@
 
 			}
 		})
-		
+
 		//获取用户名
 		function getnickname(){
 			$.post("login/getnickname", {}, function(data) {
@@ -200,7 +200,7 @@
 				$("#login").css('display', 'none');
 			}, "json");
 		}
-		
+
 		//下线
 		function loginout(){
 			$.post("login/loginout", {}, function(data) {
@@ -208,17 +208,17 @@
 			}, "text");
 			window.location.reload();
 		}
-		
+
 		function joberCheck(){
 				//先发送请求获取登录用户id
 				$.get("login/joberCheck", null, function(data){
 				if (data.code == 500) {
-					console.log("请先登录...");
-					$("#em").text("你好！请先登录...");
+					console.log("请您先登录~");
+					$("#em").text("请您先登录~");
 					$("#n").css('display', 'flex');
 					return;
 				}
-			
+
 				if (data.code == 200) {
 					//连上 websocket服务器
 					openWebSocket(data.msg);
@@ -226,7 +226,7 @@
 				}
 			},"json");
 		}
-    
+
 /* 		$(function(){
 			//先发送请求获取登录用户id
 			$.get("login/joberCheck", null, function(data){
@@ -235,14 +235,14 @@
 				location.href="../login.html";
 				return;
 			}
-		
+
 			if (data.code == 200) {
 				//连上 websocket服务器
 				openWebSocket(data.msg);
 			}
 		},"json");
 	}) */
-		
+
     </script>
 </body>
 </html>

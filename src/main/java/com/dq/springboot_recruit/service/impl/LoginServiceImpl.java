@@ -12,9 +12,11 @@ import com.dq.springboot_recruit.util.StringUtil;
 
 
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月9日 下午4:10:37
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 17:11
+ */
+
 @Service
 public class LoginServiceImpl implements ILoginService{
 	@Autowired

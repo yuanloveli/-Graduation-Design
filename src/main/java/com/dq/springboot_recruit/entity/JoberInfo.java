@@ -1,8 +1,14 @@
 package com.dq.springboot_recruit.entity;
+
+import lombok.Data;
+
 /**
-* @author 作者:软件2班dq
-* @version 创建时间：2021年5月8日 上午11:11:03
-*/
+ *
+ * @author yuanli
+ * @date 2023/2/23 14:04
+ */
+
+@Data
 public class JoberInfo {
 	int jno;			//求职者编号
 	String nickname;	//昵称
